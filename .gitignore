@@ -1,0 +1,24 @@
+# Local environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# External repositories
+RVC-WebUI/
+
+# Audio datasets and generated training artifacts
+dataset/**/raw/*
+dataset/**/processed/*
+!dataset/**/raw/.gitkeep
+!dataset/**/processed/.gitkeep
+
+# Model exports
+weights/*
+!weights/.gitkeep
+
+# Common local artifacts
+*.log
+*.tmp
+
+dataset
