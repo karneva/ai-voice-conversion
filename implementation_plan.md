@@ -1,82 +1,230 @@
-# RVC AI voice conversion implementation plan
+# AI 커버 음성 모델: 학습·튜닝 실험 계획
 
-This workspace is prepared for an RVC-based voice conversion experiment. Use only audio you have the right to process, train on, and generate from. Do not publish or distribute a model or generated audio that imitates a real person without the required permission.
+## 0. 목표
 
-## Target Layout
+이 레포의 목표는 두 가지다.
+
+1. **감상:** 좋아하는 가수의 목소리로 원하는 노래를 듣는다. 결과물은 개인적으로만 쓴다.
+2. **포트폴리오:** 음성 변환 모델을 직접 학습하고 튜닝한다. "무엇을 바꿨고, 어떻게 측정했고, 얼마나 좋아졌는지"를 재현 가능한 실험 기록으로 남긴다.
+
+포트폴리오가 답할 핵심 질문은 다음과 같다.
+
+> 노트북 GPU(RTX 4050, 6GB)와 수십 분 분량의 보컬만으로 RVC 계열 노래 음성 변환 모델을 만들 때,
+> **어떤 요인이 목표 가수와의 유사도·음정 정확도·발음 명료도를 가장 크게 바꾸는가?**
+> 그리고 **학습 loss만으로는 보이지 않는 과적합을 어떻게 잡아내는가?**
+
+평가를 위한 기본 원칙은 세 가지다.
+
+- **평가 기준을 튜닝보다 먼저 고정한다.** held-out 데이터와 지표 스크립트를 먼저 만든 뒤에 실험을 시작한다.
+- **한 번에 변수 하나만 바꾼다.** 모든 결과는 Baseline-0과 비교한다.
+- **결과가 나쁘거나 차이가 없어도 기록한다.** "48k는 손실 압축 음원에서 효과 없음"도 유효한 결과다.
+
+## 1. 트랙 분리: 개인용과 공개용
+
+실험 파이프라인과 평가 방법은 두 트랙이 같다. 다른 것은 **데이터와 공개 범위**뿐이다.
+
+| | Private 트랙 | Public 트랙 |
+| --- | --- | --- |
+| 대상 목소리 | 좋아하는 가수 | 내 목소리(권장), 또는 공개 라이선스 가창 데이터셋 |
+| 용도 | 개인 감상, 주된 실험 | 포트폴리오 데모 음원·모델 공개 |
+| 공개하는 것 | 지표, 그래프, 스펙트로그램, 설정, 코드 | 위의 전부 + 데모 음원 + 모델 카드 |
+| 공개하지 않는 것 | 모델 가중치(.pth/.index), 변환 음원 | 상업 음원 반주 (직접 만든 반주나 저작권 무료 반주, 또는 아카펠라만 사용) |
+
+**Public 트랙 데이터 후보**
+
+- **내 목소리:** 반주 없이 녹음한 노래 10~20분. 동의 문제가 없고 가장 깨끗한 데이터라서 데이터 양·정제 실험에 특히 좋다. held-out 구간에 쓸 원곡 라인도 직접 부를 수 있다.
+- **GTSinger KO-Tenor-1:** 한국어 남성 테너. 라이선스는 CC BY-NC-SA 4.0으로, 비상업 용도에 한하며 결과물도 같은 라이선스로 공개해야 한다.
+- **CSD (Children's Song Dataset):** 한국어 여성 가수. CC BY-NC-SA 4.0이고, 원 가수를 비방하는 사용은 금지된다.
+- **AIHub 가창 데이터:** 재배포가 금지되어 있어서 원본 클립은 공개하지 말고 출처(NIA)를 표기한다.
+
+## 2. 환경 (2026-10 기준, 세팅 완료)
+
+| 구성 | 위치 | 버전 |
+| --- | --- | --- |
+| GPU | - | RTX 4050 Laptop 6GB, driver 591.44 |
+| ffmpeg | winget `Gyan.FFmpeg` | 9.0.2 |
+| 학습·추론 | `Applio/` (`env/`에 Python 3.12) | Applio 3.6.6, torch 2.11.0+cu128 |
+| 보컬 분리 | `separator/env` | audio-separator 0.47.0, onnxruntime-gpu 1.22.0 |
+| 평가 (예정) | `evaluation/env` | 지표 도구는 §5 참고 |
+
+- 세 환경은 서로 섞지 않는다. 특히 평가 도구인 faster-whisper는 CPU용 onnxruntime을 끌어와서 separator 환경의 GPU용 onnxruntime과 충돌한다.
+- 시스템 Python 3.13은 사용하지 않는다.
+
+## 3. 파이프라인
+
+```text
+[학습 데이터]
+원곡 ─▶ 보컬 분리 (MelBand-RoFormer) ─▶ (선택) 리버브 제거 ─▶ 수동 검수 ─▶ dataset manifest
+                                                                      │
+          ┌─────── song 단위 분할: train / held-out ◀──────────────────┘
+          ▼
+Applio preprocess ─▶ extract (f0, embedder) ─▶ train (N epoch마다 가중치 저장) ─▶ index
+                                                     │
+[평가]                                                ▼
+고정 source 세트 ─▶ 모든 체크포인트로 batch-infer ─▶ 지표 계산 ─▶ runs.csv ─▶ 표·그래프
+
+[커버 제작]
+커버할 곡 ─▶ 보컬 분리 ─▶ vocals → 최적 모델로 변환 ─▶ (other)와 믹싱 ─▶ 결과 음원
+```
+
+- 보컬 분리 명령: `scripts\separate_vocals.bat <곡 또는 폴더> [출력 폴더]`
+- 이전 계획에서 쓰던 고정 길이 자르기 스크립트는 삭제했다. Applio의 preprocess가 무음 구간 기준 자르기와 리샘플링을 직접 한다.
+
+## 4. 데이터셋과 분할 규칙
+
+1. **원본 관리:** 원본 곡, 분리된 보컬, 선택 결과를 `dataset/<track>/`에 둔다. 파일 목록, 길이, SHA-256을 `dataset/<track>/manifest.csv`에 기록한다.
+2. **수동 검수:** 분리 결과를 들어보고 아래 구간을 잘라낸다.
+   - 악기 소리가 새어 들어온 구간
+   - 코러스나 백보컬이 겹치는 구간
+   - 리버브 꼬리가 긴 구간
+   - 단, 숨소리와 무성 자음은 남긴다.
+3. **곡 단위 분할:** 목표 가수 보컬의 10~15%(2~3분)를 **곡 단위로** held-out으로 뺀다.
+   - held-out 곡은 학습 데이터와 FAISS index 어디에도 넣지 않는다. index에 들어가면 검색 과정에서 정답이 새어 나간다.
+   - held-out은 5~10초 길이의 유성음 클립으로 자른다.
+4. **고정 source 세트:** 다른 한국어 가수 3~5명의 보컬 클립 10~20개(각 10초 내외)를 준비한다.
+   - 남녀와 음역대를 섞고, 음정이 어려운 구간(고음 벨팅, 가성, 비브라토, 빠른 멜리스마)을 일부러 포함한다.
+   - 클립별 transpose 값을 기록해 둔다.
+   - 이 세트는 프로젝트 끝까지 바꾸지 않는다.
+
+## 5. 평가 프로토콜 (실험 전에 고정)
+
+목표 가수가 다른 가수의 노래를 실제로 부른 정답 음원은 없다. 그래서 두 가지 방식을 병행한다.
+
+- **(a) 교차 변환:** 고정 source 세트를 목표 가수 목소리로 변환한다. 모든 실험의 주 지표가 여기서 나온다.
+- **(b) 재구성:** held-out 목표 가수 클립을 같은 목소리로 다시 변환한다(transpose 0). 정답과 짝지어 비교할 수 있는 유일한 경우지만, 실제보다 좋게 나오는 경향이 있다.
+
+### 객관 지표
+
+| 축 | 지표 | 도구 | 비고 |
+| --- | --- | --- | --- |
+| 화자 유사도 (주 지표) | ECAPA cosine (held-out 목표 가수 centroid 기준). 정규화 SIM = (s − 하한) / (상한 − 하한) | speechbrain 1.1.2 | source 가수와의 유사도도 함께 계산해서 원래 목소리가 남는지 확인한다 |
+| 음정 | F0 RMSE(cents), V/UV 오류율, 옥타브 오류율 | torchcrepe 또는 pyworld 0.3.5 | 기준은 transpose를 적용한 source F0. RVC가 내부에서 RMVPE를 쓰므로, 평가는 다른 추출기로 해야 자기 자신을 채점하는 문제를 피한다 |
+| 발음 명료도 | Whisper CER의 차이 (변환 결과 − source), 공백 제거 | faster-whisper 1.2.1 (large-v3-turbo) + jiwer 4.0.0 | 노래 음성에서는 Whisper CER의 절대값을 믿기 어려워서 차이만 본다 |
+| 자연스러움 (보조) | SingMOS-Pro, UTMOS22 | torch.hub | source 대비 차이와 시스템 단위 평균만 보고한다. "MOS"라고 부르지 않는다 |
+| 스펙트럼 왜곡 (재구성 전용) | MCD | mel-cepstral-distance 0.0.4 | 체크포인트 간 비교와 과적합 진단용 |
+
+- **기준값 행을 모든 표에 넣는다.**
+  - 상한: source 보컬 자체의 점수, held-out 목표 가수 클립끼리의 유사도
+  - 하한: 다른 가수들과 목표 가수 centroid의 유사도
+- **VRAM:** 지표 모델은 하나씩 로드했다 해제한다. 각 모델이 2.2GiB 이하라서 6GB GPU로 충분하다. 단, Applio 학습 중에는 평가를 돌리지 않는다.
+
+### 주관 평가 (마지막 비교에만)
+
+- **청취자와 자극:** 5~10명이 8~12개 클립을 듣는다. 모든 클립은 -23 LUFS로 음량을 맞추고 보컬만 들려준다.
+- **숨은 기준 클립:** 실제 목표 가수 클립(상한)과 일부러 망가뜨린 클립(하한)을 섞어 둔다. 상한 클립에 하한보다 낮은 점수를 준 청취자는 제외한다.
+- **테스트:**
+  - 자연스러움: 1~5점 평가(ACR)
+  - 유사도: "같은 가수인가?"를 4점 척도로 묻는다(SVCC 방식).
+  - 상위 두 시스템 비교: ABX 또는 선호도 테스트를 하고 sign test로 유의성을 확인한다.
+- **도구:** webMUSHRA나 간단한 Gradio 페이지를 쓴다.
+
+## 6. Baseline-0
+
+Applio의 CLI 기본값과 UI 기본값이 다르다. 그래서 **모든 플래그를 명시적으로 고정**하고, 실제 명령은 [training_config.md](training_config.md)에 둔다.
+
+| 단계 | 설정 |
+| --- | --- |
+| preprocess | 40k, cut `Automatic`, normalization `post`, 노이즈 제거 끔, 고역 통과 필터(process-effects) 끔 |
+| extract | f0 `rmvpe`, embedder `contentvec`, `--gpu 0`, include-mutes 2 |
+| train | vocoder `HiFi-GAN`, 기본 pretrain, batch 8(OOM이면 `--checkpointing` 또는 batch 4), save-every-epoch 10, 에폭별 가중치 저장 켬, fp16 |
+| infer | f0 `rmvpe`, index-rate 0.3, protect 0.33, volume-envelope 1.0, autotune 끔, clean-audio 끔 |
+
+infer 행의 값은 **CLI 기본값**이다. UI 기본값은 index-rate 0.75, protect 0.5인데, protect가 0.5이면 보호 기능이 꺼진다.
+
+## 7. 실험 목록 (우선순위 순)
+
+모든 실험은 Baseline-0에서 변수 하나만 바꾼다. "재학습"은 학습을 새로 돌려야 하는 횟수다.
+
+| ID | 질문 | 바꾸는 것 | 재학습 | 산출물 |
+| --- | --- | --- | --- | --- |
+| E1 | 학습 loss는 과적합을 보여주는가? | 에폭 (Baseline을 400~500 에폭까지 학습하고, 10 에폭마다 저장된 체크포인트를 전부 평가) | 1 | **held-out 지표와 smoothed loss를 에폭별로 겹친 그래프**, 검증된 학습 중단 규칙 |
+| E2 | 목표 가수 유사도와 발음 명료도의 trade-off | index-rate {0, 0.3, 0.5, 0.75, 1.0} × protect {0.2, 0.33, 0.5} | 0 | 유사도와 CER의 Pareto 그래프 |
+| E3 | 어려운 음정 구간에 강한 f0 추출기는? | 추론 f0 {rmvpe, fcpe, crepe} | 0 | 옥타브 오류율 표 |
+| E4 | 데이터를 얼마나 정제해야 하나? | 분리 모델 (MelBand-RoFormer, MDX-NET, htdemucs), 리버브 제거 {없음, 약하게, 강하게} | 3~5 | 데이터 품질별 지표 표, "데이터 결함이 음색으로 학습된" 사례 |
+| E5 | 데이터는 몇 분이면 충분한가? | 5 ⊂ 10 ⊂ 20분 중첩 부분집합(곡과 음역대를 고르게 섞어서 구성) | 3 | 데이터 양별 품질 곡선 (스텝 수를 맞춘 버전과 에폭 수를 맞춘 버전) |
+| E6 | 사전학습 모델의 효과 | 기본 pretrain과 TITAN-Medium(Apache-2.0) 등 비교, 효과가 크면 5분 데이터로도 재검증 | 2~3 | 수렴 속도와 최종 품질 |
+| E7 | 한국어 발음에 유리한 임베더는? | contentvec, korean-hubert-base, spin-v2 | 2 | 발음과 음색의 trade-off 표 |
+| E8 | (선택) 샘플레이트, vocoder, batch 크기 | 32k/40k/48k, HiFi-GAN@32k와 RefineGAN@32k 비교, batch 4/8 | 2~4 | 비용(초/에폭, 최대 VRAM) 대비 품질 |
+
+- E2와 E3는 재학습이 필요 없다. E1의 최적 체크포인트 하나로 바로 돌릴 수 있다.
+- 학습 실험의 개수는 M3 스모크 테스트에서 잰 초/에폭 값으로 다시 정한다.
+- 시간이 허락하면 최종 설정을 시드만 바꿔 한 번 더 학습해서 실행 간 편차를 보고한다.
+
+## 8. 실험 관리
+
+- **Run ID:** `E<번호>-<변경점>` 형식으로 붙인다(예: `E1-base`, `E7-korean-hubert`). Applio의 `--model-name`에도 같은 값을 쓴다.
+- **runs/<run_id>/에 기록할 것** (가중치는 git에서 제외):
+  - 실행한 CLI 명령 전문
+  - Applio `logs/<model>/config.json` 사본과 `model_info.json`
+  - pretrain 출처 URL과 해시
+  - 사용한 데이터 manifest 버전
+  - 학습 시간, 최대 VRAM
+- **results/runs.csv:** run과 체크포인트별 지표를 한 줄씩 쌓는다. 모든 표와 그래프는 이 파일에서 스크립트로 다시 만들 수 있어야 한다.
+- **실험 노트:** 실험마다 "예상 / 결과 / 해석"을 3줄로 남긴다.
+- **TensorBoard:** epoch 단위 스칼라는 마지막 배치 값이라 들쭉날쭉하다. 대신 `loss_avg_50/*` 태그로 곡선을 그린다.
+
+**Applio 3.6.6에서 주의할 점** (코드 확인 결과)
+
+- `--save-every-weights`는 기본값이 켜짐이고, 플래그를 넘기면 오히려 **꺼진다**. 그래서 넘기지 않는다.
+- extract 단계는 이미 있는 `.npy` 파일을 건너뛰고, `config.json`과 `.index`가 이미 있으면 다시 만들지 않는다. f0 방식, embedder, 샘플레이트를 바꿀 때는 **새 model-name을 쓴다**.
+- 같은 이름으로 다시 학습하면 저장된 G/D 체크포인트에서 자동으로 이어서 학습한다.
+- 과적합 감지 기능은 3.6.4에서 제거됐고, 최적 체크포인트도 자동으로 고르지 않는다. 그래서 E1이 필요하다.
+- UI의 protect 툴팁은 "0.5가 최대 보호"라고 설명하지만, 코드에서는 0.5가 보호 꺼짐이다(`rvc/infer/pipeline.py`).
+- UI는 VRAM이 6GB 미만일 때 gradient checkpointing을 자동으로 켠다. 하지만 이 GPU는 6GB로 반올림되어 켜지지 않는다. 필요하면 `--checkpointing`을 직접 넘긴다.
+- 추론할 때 `.pth` 파일에 기록된 embedder를 읽지 않는다. 학습 때 쓴 `--embedder-model`을 직접 지정해야 한다.
+- CLI의 `hybrid[...]` f0 옵션은 구현되어 있지 않아서 실행하면 오류가 난다.
+- 학습 precision(fp16)은 CLI 플래그가 아니라 `%APPDATA%\Applio\config.json`에서 정해진다.
+
+## 9. 포트폴리오 결과물
+
+**README 구성:** 동기 → 파이프라인 그림 → Baseline → 실험 E1~E8 (각각 가설, 설정, 결과 표, 오디오 링크) → 최종 설정과 Baseline 비교 → 실패 분석 → 윤리·한계 → 재현 방법
+
+**핵심 그래프**
+
+1. E1: 에폭에 따른 held-out 지표와 학습 loss. 가장 설득력 있는 그림이 될 것이다.
+2. E2: index-rate × protect Pareto 그래프
+3. E5: 데이터 양(분)에 따른 품질
+4. E3: 어려운 음정 구간의 f0 추출기별 옥타브 오류율
+
+**실패 사례 모음:** 실패 유형별로 오디오와 스펙트로그램 일부를 보여주고, 진단 → 시도한 해결책 → 전후 수치를 적는다. 예상되는 실패 유형은 다음과 같다.
+
+- 고음 벨팅에서 옥타브가 튀는 문제
+- 숨소리와 치찰음이 찢어지는 문제(protect로 해결)
+- 분리 과정에서 남은 반주나 리버브가 음색으로 학습되는 문제
+- index-rate가 너무 높을 때 발음이 뭉개지는 문제
+
+**모델 카드와 윤리 섹션**
+
+- 데이터 출처와 라이선스, 동의 여부
+- 실존 가수 모델을 배포하지 않는 이유
+- 데모 음원에 AI 생성 표기
+- 평가의 한계(청취자 수가 적음, 목표 가수 1명)
+
+**재현:** "표 X는 명령 Y로 다시 만들 수 있다" 형식으로, 환경 버전과 GPU 시간을 함께 적는다.
+
+## 10. 마일스톤
+
+- [x] **M0 환경:** ffmpeg, Applio 3.6.6, audio-separator 설치. GPU 동작 확인.
+- [ ] **M1 데이터:** Private 트랙 보컬 수집·분리·검수 → manifest 작성 → train/held-out 분할 → 고정 source 세트 준비
+- [ ] **M2 평가 도구:** `evaluation/env` 구성 → 지표 스크립트 작성 → 기준값(상한·하한) 측정 → 평가 프로토콜 고정
+- [ ] **M3 Baseline:** 5 에폭 스모크 테스트(초/에폭과 VRAM 측정, batch 확정) → Baseline-0 전체 학습
+- [ ] **M4 재학습 없는 실험:** E1 체크포인트 곡선, E2, E3
+- [ ] **M5 학습 실험:** E4~E7, 시간이 되면 E8
+- [ ] **M6 Public 트랙:** 데이터 준비 후 M1~M3를 반복하고, 최종 설정으로 데모 제작
+- [ ] **M7 정리:** README, 그래프, 실패 사례, 모델 카드, 주관 평가
+- [ ] **감상용 커버:** M4 이후 언제든. 최적 체크포인트로 변환하고 반주와 믹싱한다.
+
+## 11. 레포 구조 (목표)
 
 ```text
 ai-voice-conversion/
-├── RVC-WebUI/                # External RVC repository, cloned during setup
-├── dataset/
-│   └── singer-name/
-│       ├── raw/              # Put source vocal audio here
-│       └── processed/        # Generated 40 kHz sliced WAV files
-├── scripts/
-│   └── preprocess_audio.py   # Audio conversion and slicing utility
-├── weights/                  # Final .pth and .index exports
-└── training_config.md        # Recommended RVC settings and runbook
+├── Applio/                 # 학습·추론 (git 제외)
+├── separator/              # 보컬 분리 환경과 모델 (git 제외)
+├── evaluation/env/         # 평가 환경 (git 제외)
+├── dataset/<track>/        # 음원과 manifest (git 제외)
+├── scripts/                # 분리, 실험 실행, 평가, 그래프 스크립트
+├── runs/<run_id>/          # run별 설정과 로그 (가중치는 git 제외)
+├── results/                # runs.csv, 그래프 (커밋)
+├── implementation_plan.md  # 이 문서
+└── training_config.md      # Baseline-0 명령과 Applio CLI 레퍼런스
 ```
-
-## Prerequisites
-
-- NVIDIA GPU with a working CUDA-compatible PyTorch install.
-- Python environment supported by the RVC-WebUI version you use.
-- `ffmpeg` and `ffprobe` available on `PATH`.
-- Source audio placed in `dataset/singer-name/raw`.
-
-## Setup Steps
-
-1. Clone RVC-WebUI:
-
-   ```bash
-   git clone https://github.com/RVC-Project/Retrieval-based-Voice-Conversion-WebUI.git RVC-WebUI
-   ```
-
-2. Create and activate a virtual environment inside the RVC project:
-
-   ```bash
-   cd RVC-WebUI
-   python -m venv .venv
-   source .venv/bin/activate
-   ```
-
-3. Install dependencies using the RVC-WebUI documentation for your CUDA and PyTorch version.
-
-4. Add vocal-only source files to:
-
-   ```text
-   dataset/singer-name/raw/
-   ```
-
-5. Preprocess the dataset:
-
-   ```bash
-   python scripts/preprocess_audio.py \
-     --input dataset/singer-name/raw \
-     --output dataset/singer-name/processed \
-     --sample-rate 40000 \
-     --segment-seconds 8
-   ```
-
-6. In RVC-WebUI, train using the processed dataset path:
-
-   ```text
-   ../dataset/singer-name/processed
-   ```
-
-## Training Strategy
-
-1. Run a short smoke test first, around 5 epochs, to verify CUDA, logs, and dataset loading.
-2. Run a quality checkpoint at around 50 epochs.
-3. Continue to around 200 epochs only if the 50 epoch result has stable pronunciation and pitch tracking.
-4. Use Harvest F0 extraction for vocal stability.
-5. Test inference with a short 5 to 10 second clip before longer conversions.
-
-## Validation Checklist
-
-- `ffmpeg -version` works.
-- `python scripts/preprocess_audio.py --help` works.
-- Processed files are mono 40 kHz WAV files.
-- RVC-WebUI can load the processed dataset.
-- A 5 epoch smoke test completes without CUDA errors.
-- A short inference test does not contain severe pitch drift, clipping, or timing artifacts.
