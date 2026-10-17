@@ -1,24 +1,28 @@
-# Local environments
+# Python
 .venv/
 venv/
 __pycache__/
 *.py[cod]
 
-# External repositories
+# Tools installed into the repo (see implementation_plan.md §2)
+Applio/
 RVC-WebUI/
+separator/
+evaluation/env/
 
-# Audio datasets and generated training artifacts
-dataset/**/raw/*
-dataset/**/processed/*
-!dataset/**/raw/.gitkeep
-!dataset/**/processed/.gitkeep
+# Audio data: source songs, separated vocals, splits, manifests
+dataset/
+separated/
 
-# Model exports
-weights/*
-!weights/.gitkeep
+# Experiment runs: keep run.json, commands.log, configs and metrics; drop audio and raw logs
+runs/*/infer/
+runs/*/logs/
+
+# Results: keep runs.csv, calibration, tables and PNG figures; SVGs and caches are regenerable
+results/cache/
+results/figures/*.svg
 
 # Common local artifacts
 *.log
+!runs/*/commands.log
 *.tmp
-
-dataset
