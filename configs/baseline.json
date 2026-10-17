@@ -1,0 +1,43 @@
+{
+  "run_id": "E1-base",
+  "track": "private",
+  "dataset_dir": "dataset/private/train",
+  "description": "Baseline-0 (implementation_plan.md §6, training_config.md). Trained to 500 epochs; every 10-epoch checkpoint is evaluated for E1.",
+  "preprocess": {
+    "sample_rate": 40000,
+    "cpu_cores": 8,
+    "cut_preprocess": "Automatic",
+    "process_effects": false,
+    "noise_reduction": false,
+    "noise_reduction_strength": 0.7,
+    "chunk_len": 3.0,
+    "overlap_len": 0.3,
+    "normalization_mode": "post"
+  },
+  "extract": {
+    "f0_method": "rmvpe",
+    "embedder_model": "contentvec",
+    "embedder_model_custom": null,
+    "gpu": "0",
+    "cpu_cores": 8,
+    "include_mutes": 2
+  },
+  "train": {
+    "vocoder": "HiFi-GAN",
+    "pretrained": "default",
+    "batch_size": 8,
+    "save_every_epoch": 10,
+    "total_epoch": 500,
+    "gpu": "0",
+    "index_algorithm": "Auto",
+    "checkpointing": false,
+    "cache_data_in_gpu": false
+  },
+  "infer": {
+    "grid": [
+      {"f0_method": "rmvpe", "index_rate": 0.3, "protect": 0.33, "volume_envelope": 1.0}
+    ],
+    "checkpoints": "all",
+    "sets": ["source_eval", "heldout"]
+  }
+}

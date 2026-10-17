@@ -1,0 +1,11 @@
+{
+  "base": "baseline.json",
+  "run_id": "E0-smoke-public",
+  "track": "public",
+  "dataset_dir": "dataset/public/train",
+  "description": "Smoke test on the public track: 5 epochs, a checkpoint every epoch. Measures sec/epoch, peak VRAM and disk use (M3).",
+  "train": {
+    "total_epoch": 5,
+    "save_every_epoch": 1
+  }
+}
