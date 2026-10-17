@@ -1,0 +1,270 @@
+{
+  "run_id": "E0-smoke-public",
+  "created_at": "2026-10-17T07:47:19+09:00",
+  "config_path": "configs/E0-smoke-public.json",
+  "config": {
+    "run_id": "E0-smoke-public",
+    "track": "public",
+    "dataset_dir": "dataset/public/train",
+    "description": "Smoke test on the public track: 5 epochs, a checkpoint every epoch. Measures sec/epoch, peak VRAM and disk use (M3).",
+    "preprocess": {
+      "sample_rate": 40000,
+      "cpu_cores": 8,
+      "cut_preprocess": "Automatic",
+      "process_effects": false,
+      "noise_reduction": false,
+      "noise_reduction_strength": 0.7,
+      "chunk_len": 3.0,
+      "overlap_len": 0.3,
+      "normalization_mode": "post"
+    },
+    "extract": {
+      "f0_method": "rmvpe",
+      "embedder_model": "contentvec",
+      "embedder_model_custom": null,
+      "gpu": "0",
+      "cpu_cores": 8,
+      "include_mutes": 2
+    },
+    "train": {
+      "vocoder": "HiFi-GAN",
+      "pretrained": "default",
+      "batch_size": 8,
+      "save_every_epoch": 1,
+      "total_epoch": 5,
+      "gpu": "0",
+      "index_algorithm": "Auto",
+      "checkpointing": false,
+      "cache_data_in_gpu": false
+    },
+    "infer": {
+      "grid": [
+        {
+          "f0_method": "rmvpe",
+          "index_rate": 0.3,
+          "protect": 0.33,
+          "volume_envelope": 1.0
+        }
+      ],
+      "checkpoints": "all",
+      "sets": [
+        "source_eval",
+        "heldout"
+      ]
+    }
+  },
+  "model_run_id": "E0-smoke-public",
+  "applio_logs": "Applio/logs/E0-smoke-public",
+  "environment": {
+    "repo_commit": "e0e56b2eed60f13c65c426733d92d7005e26cde3",
+    "repo_dirty": true,
+    "applio_version": "3.6.6",
+    "applio_git": "3.6.6-dirty",
+    "applio_precision": "fp16",
+    "gpu": {
+      "name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+      "driver": "591.44",
+      "memory_total_mib": 6141
+    },
+    "python_runner": "3.12.15",
+    "python_applio": "Python 3.12.15",
+    "torch_applio": "2.11.0+cu128",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "updated_at": "2026-10-17T08:39:28+09:00",
+  "steps": {
+    "prepare": {
+      "status": "ok",
+      "started_at": "2026-10-17T07:54:28+09:00",
+      "dataset": {
+        "dir": "dataset/public/train",
+        "n_files": 942,
+        "total_mib": 1715.2,
+        "fingerprint": "b127a0178afc2ba71a10614868928a47f22f66fbd738741c56ebaf953c0a35b4",
+        "manifest": "dataset/public/manifest.csv",
+        "manifest_sha256": "cc9c1c3eba140fa5627b765b33e855e1d763502d6993c160cfb5121364837e4d"
+      },
+      "counts": {
+        "sliced_audios": 4908,
+        "f0": 4899,
+        "f0_voiced": 4899,
+        "extracted": 4908
+      },
+      "model_info": {
+        "total_dataset_duration": "03:28:09",
+        "total_seconds": 12489.46755,
+        "embedder_model": "contentvec",
+        "speakers_id": 1
+      },
+      "extract_failed_slices": [
+        "0_116_3",
+        "0_178_7",
+        "0_458_4",
+        "0_574_3",
+        "0_595_5",
+        "0_633_4",
+        "0_761_10",
+        "0_766_4",
+        "0_809_4"
+      ],
+      "finished_at": "2026-10-17T07:55:24+09:00",
+      "duration_s": 56.6
+    },
+    "train": {
+      "status": "ok",
+      "started_at": "2026-10-17T07:55:24+09:00",
+      "resumed": false,
+      "resumed_from_epoch": null,
+      "pretrained": {
+        "spec": "default",
+        "g": {
+          "path": "Applio/rvc/models/pretraineds/hifi-gan/f0G40k.pth",
+          "sha256": "3b2c44035e782c4b14ddc0bede9e2f4a724d025cd073f736d4f43708453adfcb"
+        },
+        "d": {
+          "path": "Applio/rvc/models/pretraineds/hifi-gan/f0D40k.pth",
+          "sha256": "6b6ab091e70801b28e3f41f335f2fc5f3f35c75b39ae2628d419644ec2b0fa09"
+        }
+      },
+      "vram_before_mib": 0,
+      "epochs": [
+        {
+          "epoch": 1,
+          "step": 613,
+          "applio_s": 529,
+          "wall_s": 551.69,
+          "first_in_invocation": true
+        },
+        {
+          "epoch": 2,
+          "step": 1226,
+          "applio_s": 327,
+          "wall_s": 329.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 3,
+          "step": 1839,
+          "applio_s": 324,
+          "wall_s": 326.75,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 4,
+          "step": 2452,
+          "applio_s": 326,
+          "wall_s": 329.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 5,
+          "step": 3065,
+          "applio_s": 315,
+          "wall_s": 317.84,
+          "first_in_invocation": false
+        }
+      ],
+      "peak_vram_mib": 5417,
+      "vram_samples": 366,
+      "sec_per_epoch": 327.9,
+      "sec_per_epoch_applio": 325.0,
+      "steps_per_epoch": 613.0,
+      "checkpoints": {
+        "1": "E0-smoke-public_1e_613s.pth",
+        "2": "E0-smoke-public_2e_1226s.pth",
+        "3": "E0-smoke-public_3e_1839s.pth",
+        "4": "E0-smoke-public_4e_2452s.pth",
+        "5": "E0-smoke-public_5e_3065s.pth"
+      },
+      "disk_mib": 10223.2,
+      "finished_at": "2026-10-17T08:29:24+09:00",
+      "duration_s": 2039.0
+    },
+    "infer": {
+      "status": "ok",
+      "started_at": "2026-10-17T08:29:24+09:00",
+      "sets": [
+        "source_eval",
+        "heldout"
+      ],
+      "epochs": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "combos": [
+        "f0-rmvpe_ir0.30_p0.33_ve1.00"
+      ],
+      "n_clips": {
+        "source_eval": 8,
+        "heldout": 30
+      },
+      "converted": 190,
+      "skipped_existing": 0,
+      "batch_infer_calls": 35,
+      "infer_wall_s": 604.5,
+      "finished_at": "2026-10-17T08:39:28+09:00",
+      "duration_s": 604.5
+    }
+  },
+  "invocations": [
+    {
+      "step": "prepare",
+      "started_at": "2026-10-17T07:47:19+09:00",
+      "argv": [
+        "configs/E0-smoke-public.json",
+        "all"
+      ],
+      "forced": false,
+      "repo_commit": "e0e56b2eed60f13c65c426733d92d7005e26cde3",
+      "repo_dirty": true,
+      "finished_at": "2026-10-17T07:52:35+09:00",
+      "duration_s": 315.3,
+      "status": "failed"
+    },
+    {
+      "step": "prepare",
+      "started_at": "2026-10-17T07:54:28+09:00",
+      "argv": [
+        "configs/E0-smoke-public.json",
+        "all"
+      ],
+      "forced": false,
+      "repo_commit": "e0e56b2eed60f13c65c426733d92d7005e26cde3",
+      "repo_dirty": true,
+      "finished_at": "2026-10-17T07:55:24+09:00",
+      "duration_s": 56.6,
+      "status": "ok"
+    },
+    {
+      "step": "train",
+      "started_at": "2026-10-17T07:55:24+09:00",
+      "argv": [
+        "configs/E0-smoke-public.json",
+        "all"
+      ],
+      "forced": false,
+      "repo_commit": "e0e56b2eed60f13c65c426733d92d7005e26cde3",
+      "repo_dirty": true,
+      "finished_at": "2026-10-17T08:29:24+09:00",
+      "duration_s": 2039.0,
+      "status": "ok"
+    },
+    {
+      "step": "infer",
+      "started_at": "2026-10-17T08:29:24+09:00",
+      "argv": [
+        "configs/E0-smoke-public.json",
+        "all"
+      ],
+      "forced": false,
+      "repo_commit": "e0e56b2eed60f13c65c426733d92d7005e26cde3",
+      "repo_dirty": true,
+      "finished_at": "2026-10-17T08:39:28+09:00",
+      "duration_s": 604.5,
+      "status": "ok"
+    }
+  ]
+}
