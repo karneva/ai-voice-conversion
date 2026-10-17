@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import os
 import random
 import shutil
+import unicodedata
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
@@ -42,9 +44,23 @@ def parse_args() -> argparse.Namespace:
         description="Assign split=train/heldout per song (never splitting a song) and write it back to the manifest."
     )
     parser.add_argument("--manifest", required=True, help="Manifest CSV (dataset/<track>/manifest.csv).")
-    parser.add_argument("--heldout-fraction", type=float, default=0.12, help="Target held-out share of total duration.")
+    parser.add_argument(
+        "--heldout-fraction",
+        type=float,
+        default=0.12,
+        help="Target held-out share of the total duration of all songs (--train-only songs included).",
+    )
     parser.add_argument("--seed", type=int, default=1234)
     parser.add_argument("--min-heldout-songs", type=int, default=2)
+    parser.add_argument(
+        "--train-only",
+        action="append",
+        default=[],
+        metavar="PATTERN",
+        help='fnmatch pattern on song_id (repeatable) for songs that always go to train and are never held out, '
+        'e.g. "*킬링보이스*" for a long live medley. Held-out songs are picked from the other songs only; the '
+        "target stays --heldout-fraction of the total duration.",
+    )
     parser.add_argument(
         "--resplit",
         action="store_true",
@@ -85,12 +101,35 @@ def existing_splits(rows: list[dict[str, str]]) -> dict[str, str]:
     return {song: values.pop() for song, values in splits.items()}
 
 
-def choose_heldout(durations: dict[str, float], fraction: float, min_songs: int, seed: int) -> set[str]:
-    """Best of many seeded shuffles: the song prefix (>= min_songs) whose duration is closest to the target."""
-    songs = sorted(durations)
+def train_only_songs(songs: list[str], patterns: list[str]) -> set[str]:
+    pinned = set()
+    for pattern in patterns:
+        matched = {song for song in songs if fnmatch.fnmatchcase(song, unicodedata.normalize("NFC", pattern))}
+        if not matched:
+            print(f"warning: --train-only {pattern!r} matches no song_id")
+        pinned |= matched
+    if pinned:
+        print(f"train-only songs ({len(pinned)}): {sorted(pinned)}")
+    return pinned
+
+
+def choose_heldout(
+    durations: dict[str, float], fraction: float, min_songs: int, seed: int, pinned: set[str] | None = None
+) -> set[str]:
+    """Best of many seeded shuffles: the song prefix (>= min_songs) whose duration is closest to the target.
+
+    Pinned (train-only) songs count toward the total the target is a share of, but are never picked.
+    """
+    songs = sorted(set(durations) - (pinned or set()))
     if len(songs) <= min_songs:
-        raise SystemExit(f"Need more than {min_songs} songs to split, found {len(songs)}.")
+        raise SystemExit(f"Need more than {min_songs} eligible (non --train-only) songs to split, found {len(songs)}.")
     target = fraction * sum(durations.values())
+    eligible = sum(durations[song] for song in songs)
+    if target > 0.5 * eligible:
+        print(
+            f"warning: held-out target {target / 60:.1f} min is {100 * target / eligible:.0f}% of the "
+            f"{eligible / 60:.1f} min of eligible songs"
+        )
     rng = random.Random(seed)
     best: list[str] = []
     best_error = float("inf")
@@ -109,14 +148,21 @@ def choose_heldout(durations: dict[str, float], fraction: float, min_songs: int,
 
 def assign_splits(rows: list[dict[str, str]], args: argparse.Namespace) -> None:
     durations = song_durations(rows)
+    pinned = train_only_songs(sorted(durations), args.train_only)
     previous = {} if args.resplit else existing_splits(rows)
+    frozen_heldout = sorted(song for song in pinned if previous.get(song) == "heldout")
+    if frozen_heldout:
+        raise SystemExit(
+            f"--train-only songs are held out in the existing split: {frozen_heldout}. "
+            "Pass --resplit to choose a new held-out set."
+        )
     if previous:
         new_songs = sorted(set(durations) - set(previous))
         if new_songs:
             print(f"keeping existing splits; {len(new_songs)} new song(s) go to train: {new_songs}")
         splits = {song: previous.get(song, "train") for song in durations}
     else:
-        heldout = choose_heldout(durations, args.heldout_fraction, args.min_heldout_songs, args.seed)
+        heldout = choose_heldout(durations, args.heldout_fraction, args.min_heldout_songs, args.seed, pinned)
         splits = {song: "heldout" if song in heldout else "train" for song in durations}
     for row in rows:
         row["split"] = splits[row["song_id"]]
