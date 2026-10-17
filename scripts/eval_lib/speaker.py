@@ -36,6 +36,13 @@ class SpeakerEncoder:
             emb = self.model.encode_batch(x).reshape(-1).double().cpu().numpy()
         return normalize(emb)
 
+    def embed_batch(self, wavs16k: np.ndarray) -> np.ndarray:
+        """L2-normalized embeddings (N, 192) of equal-length 16 kHz mono clips shaped (N, samples)."""
+        with torch.inference_mode():
+            x = torch.from_numpy(np.ascontiguousarray(wavs16k, dtype=np.float32)).to(self.device)
+            emb = self.model.encode_batch(x).reshape(x.shape[0], -1).double().cpu().numpy()
+        return emb / np.maximum(np.linalg.norm(emb, axis=1, keepdims=True), 1e-12)
+
     def close(self) -> None:
         del self.model
         gpu.release()
