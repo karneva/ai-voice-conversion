@@ -5,10 +5,10 @@ __pycache__/
 *.py[cod]
 
 # Tools installed into the repo (see implementation_plan.md §2)
-Applio/
-RVC-WebUI/
-separator/
-evaluation/env/
+/Applio/
+/RVC-WebUI/
+/separator/
+/evaluation/env/
 
 # Audio data: source songs, separated vocals, splits, manifests
 dataset/
@@ -17,6 +17,21 @@ separated/
 # Experiment runs: keep run.json, commands.log, configs and metrics; drop audio and raw logs
 runs/*/infer/
 runs/*/logs/
+runs/**/_cache/
+# Audio and model files anywhere under runs/ (belt and braces)
+runs/**/*.wav
+runs/**/*.mp3
+runs/**/*.m4a
+runs/**/*.flac
+runs/**/*.npz
+*.pth
+*.index
+# Per-clip metric CSVs of the private track hold ASR transcripts (lyrics); aggregates stay in results/
+runs/_source/metrics/private/
+runs/E[1-9]*/metrics/**/*.csv
+# eval_reference.py: converted full-song vocals (private audio) and Applio scratch; keep json/csv/png
+runs/*/reference/**/*.wav
+runs/*/reference/**/_work/
 
 # Results: keep runs.csv, calibration, tables and PNG figures; SVGs and caches are regenerable
 results/cache/
