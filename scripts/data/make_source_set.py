@@ -76,6 +76,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--glob", default="**/*", help='Glob under --input. Default: "**/*".')
     parser.add_argument("--exclude", action="append", default=[], help="fnmatch pattern on the relative path to skip.")
     parser.add_argument("--clips-per-singer", type=int, default=4)
+    parser.add_argument(
+        "--windows-per-file",
+        type=int,
+        default=WINDOWS_PER_FILE,
+        help=f"Max clips cut from one file. Default: {WINDOWS_PER_FILE}. Raise it for singers with few songs.",
+    )
+    parser.add_argument(
+        "--transpose",
+        action="append",
+        default=[],
+        metavar="SINGER=N",
+        help="Fixed transpose for one singer instead of the median-F0 estimate (repeatable).",
+    )
     parser.add_argument("--clip-len", type=float, default=10.0, help="Window length (s).")
     parser.add_argument("--min-clip-len", type=float, default=5.0, help="Shortest acceptable clip (s).")
     parser.add_argument("--min-voiced", type=float, default=0.6, help="Minimum voiced-frame ratio of a clip.")
@@ -178,7 +191,7 @@ def subsample(rows: list[dict[str, str]], limit: int, seed: int) -> list[dict[st
 # ----------------------------------------------------------------- windows
 
 def best_windows(analysis: FrameAnalysis, args: argparse.Namespace) -> list[tuple[int, int, int]]:
-    """Up to WINDOWS_PER_FILE non-overlapping (start, end, voiced_frames) windows, most voiced first."""
+    """Up to --windows-per-file non-overlapping (start, end, voiced_frames) windows, most voiced first."""
     active = np.flatnonzero(analysis.active)
     if active.size == 0:
         return []
@@ -202,7 +215,7 @@ def best_windows(analysis: FrameAnalysis, args: argparse.Namespace) -> list[tupl
     for s, e, voiced in scored:
         if all(e <= cs or s >= ce for cs, ce, _ in chosen):
             chosen.append((s, e, voiced))
-        if len(chosen) == WINDOWS_PER_FILE:
+        if len(chosen) == args.windows_per_file:
             break
     return chosen
 
@@ -268,6 +281,16 @@ def target_median_f0(args: argparse.Namespace, pool: ProcessPoolExecutor) -> flo
     return float(np.median(pooled))
 
 
+def parse_transpose_overrides(items: list[str]) -> dict[str, int]:
+    overrides = {}
+    for item in items:
+        singer, sep, value = item.rpartition("=")
+        if not sep or not singer:
+            raise SystemExit(f"--transpose expects SINGER=N, got {item!r}")
+        overrides[singer] = int(value)
+    return overrides
+
+
 def transpose_for(target_f0: float | None, clip_f0: float) -> int:
     if target_f0 is None or not math.isfinite(clip_f0) or clip_f0 <= 0:
         return 0
@@ -276,7 +299,9 @@ def transpose_for(target_f0: float | None, clip_f0: float) -> int:
 
 # ------------------------------------------------------------------- output
 
-def write_clips(picked: list[Candidate], output_dir: Path, target_f0: float | None) -> list[dict[str, str]]:
+def write_clips(
+    picked: list[Candidate], output_dir: Path, target_f0: float | None, overrides: dict[str, int]
+) -> list[dict[str, str]]:
     clips_dir = output_dir / "clips"
     clips_dir.mkdir(parents=True, exist_ok=True)
     for stale in clips_dir.glob("*.wav"):
@@ -291,7 +316,7 @@ def write_clips(picked: list[Candidate], output_dir: Path, target_f0: float | No
         start_s, end_s = cand.start * HOP_S, cand.end * HOP_S
         target = clips_dir / f"{clip_id}.wav"
         write_wav(target, to_mono(data)[int(round(start_s * sr)) : int(round(end_s * sr))], sr)
-        transpose = transpose_for(target_f0, cand.median_f0)
+        transpose = overrides.get(cand.singer, transpose_for(target_f0, cand.median_f0))
         rows.append({
             "clip_id": clip_id,
             "path": record_path(target),
@@ -318,6 +343,7 @@ def main() -> None:
         raise SystemExit("--singer-from arg needs --singer.")
     if not 0 < args.min_clip_len <= args.clip_len:
         raise SystemExit("Expected 0 < --min-clip-len <= --clip-len.")
+    overrides = parse_transpose_overrides(args.transpose)
 
     output_dir = resolve_path(args.output_dir or f"dataset/{args.track}/source_eval")
     clips_csv = output_dir / "clips.csv"
@@ -335,7 +361,7 @@ def main() -> None:
 
     if target_f0:
         print(f"target median F0: {target_f0:.1f} Hz")
-    rows_out = write_clips(picked, output_dir, target_f0)
+    rows_out = write_clips(picked, output_dir, target_f0, overrides)
     write_csv(clips_csv, rows_out, CLIP_COLUMNS)
     minutes = sum(float(r["end_s"]) - float(r["start_s"]) for r in rows_out) / 60.0
     print(f"done: {len(rows_out)} clip(s), {minutes:.1f} min -> {record_path(clips_csv)}")
