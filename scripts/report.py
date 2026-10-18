@@ -82,6 +82,13 @@ METRICS: dict[str, Metric] = {
     "utmos": Metric("UTMOS (predicted)", "score", True, ".2f", SLOTS[6]),
     "mcd": Metric("MCD", "MCD (not dB; project scale)", False, ".2f", SLOTS[4]),
 }
+# results/reference.csv (scripts/eval_reference.py): paired scores against the target singer's real cover.
+REFERENCE_METRICS: dict[str, Metric] = {
+    "sim_ref": Metric("Similarity to the real cover (paired 3 s windows)", "ECAPA cosine", True, ".3f", SLOTS[0]),
+    "mcd_ref": Metric("MCD vs the real cover", "MCD (project scale)", False, ".2f", SLOTS[4]),
+    "f0_corr_ref": Metric("F0 correlation vs the real cover", "Pearson r", True, ".3f", SLOTS[2]),
+}
+REFERENCE_BASELINES = {"sim_ref": "sim_ref_source", "mcd_ref": "mcd_ref_source"}
 TABLE_METRICS = (
     "sim_target_norm", "sim_target", "sim_source", "dcer", "f0_rmse_cents",
     "octave_err", "vuv_err", "gpe50", "fpc", "singmos", "utmos", "mcd",
@@ -193,6 +200,15 @@ def parse_args() -> argparse.Namespace:
     add_set(p)
     add_combo(p)
     add_epoch_choice(p)
+    add_common(p)
+
+    p = sub.add_parser("reference-curve",
+                       help="sim_ref and mcd_ref vs epoch against the real cover (results/reference.csv).")
+    p.add_argument("--run", required=True, help="Run ID.")
+    add_combo(p)
+    p.add_argument("--reference-csv", default=Path("results/reference.csv"), type=Path,
+                   help="Default: results/reference.csv.")
+    p.add_argument("--f0", action="store_true", help="Add the f0_corr_ref panel (information only).")
     add_common(p)
 
     p = sub.add_parser("summary", help="One Markdown table of all runs at their best epoch.")
@@ -1237,14 +1253,128 @@ def data_curve(args: argparse.Namespace, df: pd.DataFrame, out_dir: Path) -> Non
     write_table(out_dir, name, "\n".join(text))
 
 
+# ---------------------------------------------------------------- reference-curve
+
+
+def load_reference_rows(path: Path, run_id: str, combo: str | None) -> tuple[pd.DataFrame, str]:
+    if not path.exists():
+        raise SystemExit(f"Reference table not found: {path} (run scripts/eval_reference.py score first)")
+    df = pd.read_csv(path)
+    rows = df[df["run_id"].astype(str) == run_id]
+    if rows.empty:
+        known = ", ".join(sorted(df["run_id"].astype(str).unique()))
+        raise SystemExit(f"No rows for run '{run_id}' in {display_path(path)}. Runs: {known or 'none'}")
+    chosen = pick_combo(rows, combo, run_id)
+    rows = rows[rows["combo"] == chosen].copy()
+    for column in rows.columns:
+        if column not in ("run_id", "combo", "eval_version"):
+            rows[column] = pd.to_numeric(rows[column], errors="coerce")
+    rows["epoch"] = rows["epoch"].astype(int)
+    return rows.sort_values("epoch").drop_duplicates("epoch", keep="last"), chosen
+
+
+def reference_best(rows: pd.DataFrame, metric: str) -> pd.Series | None:
+    valid = rows.dropna(subset=[metric])
+    if valid.empty:
+        return None
+    return valid.loc[valid[metric].idxmax() if REFERENCE_METRICS[metric].higher_is_better else valid[metric].idxmin()]
+
+
+def reference_curve(args: argparse.Namespace, out_dir: Path) -> None:
+    rows, combo = load_reference_rows(repo_path(args.reference_csv), args.run, args.combo)
+    metrics = ["sim_ref", "mcd_ref"] + (["f0_corr_ref"] if args.f0 else [])
+    fig, axes = plt.subplots(len(metrics), 1, sharex=True, figsize=(7.6, 0.6 + 1.9 * len(metrics)),
+                             gridspec_kw={"hspace": 0.5})
+    epochs = rows["epoch"].to_numpy()
+    for ax, metric in zip(np.atleast_1d(axes), metrics):
+        info = REFERENCE_METRICS[metric]
+        handles = [Line2D([], [], color=info.color, marker="o", markersize=3.5, label="converted")]
+        ax.plot(epochs, rows[metric].to_numpy(dtype=float), color=info.color, marker="o", markersize=3.5,
+                markeredgecolor=SURFACE, markeredgewidth=0.8)
+        baseline = REFERENCE_BASELINES.get(metric)
+        if baseline and rows[baseline].notna().any():
+            value = float(rows[baseline].median())
+            ax.axhline(value, color=BASELINE_GRAY, linestyle="--", linewidth=1.3)
+            handles.append(Line2D([], [], color=BASELINE_GRAY, linestyle="--", label=f"source singer, unconverted ({value:{info.fmt}})"))
+        if metric == "sim_ref" and rows["sim_ref_self"].notna().any():
+            value = float(rows["sim_ref_self"].median())
+            ax.axhline(value, color=INK_MUTED, linestyle=":", linewidth=1.3)
+            handles.append(Line2D([], [], color=INK_MUTED, linestyle=":", label=f"cover vs its own centroid, LOO ({value:.3f}; centroid scale)"))
+        best = reference_best(rows, metric)
+        if best is not None and metric != "f0_corr_ref":
+            ax.plot(best["epoch"], best[metric], marker="o", markersize=8, markerfacecolor="none",
+                    markeredgecolor=info.color, markeredgewidth=1.5)
+            last = int(best["epoch"]) == int(epochs.max())
+            ax.annotate(f"best {format(best[metric], info.fmt)} @ {int(best['epoch'])}", xy=(best["epoch"], best[metric]),
+                        xytext=(-7 if last else 7, 7 if info.higher_is_better else -7), textcoords="offset points",
+                        fontsize=7.5, color=INK_SECONDARY, va="bottom" if info.higher_is_better else "top",
+                        ha="right" if last else "left",
+                        bbox={"boxstyle": "square,pad=0.15", "facecolor": SURFACE, "edgecolor": "none", "alpha": 0.85})
+        ax.margins(y=0.25)
+        low, high = ax.get_ylim()
+        pad = 0.15 * (high - low)
+        ax.set_ylim(low, high + pad) if info.higher_is_better else ax.set_ylim(low - pad, high)
+        hint = "information only" if metric == "f0_corr_ref" else info.hint
+        ax.set_title(f"{info.label}  ", loc="left")
+        ax.set_title(hint, loc="right", fontsize=8, color=INK_MUTED, fontweight="normal")
+        ax.set_ylabel(info.unit)
+        ax.legend(handles=handles, loc="upper left", bbox_to_anchor=(1.01, 1.0), borderaxespad=0.0)
+    axes = np.atleast_1d(axes)
+    axes[-1].set_xlim(0, epochs.max() * 1.03)
+    axes[-1].set_xlabel("epoch")
+    n_windows = rows["n_windows"].dropna()
+    aligned = rows["aligned_s"].dropna()
+    detail = (f"{int(n_windows.median())} paired windows, {aligned.median():.0f}s aligned"
+              if not n_windows.empty and not aligned.empty else "")
+    figure_title(fig, f"{args.run}: conversion vs the target singer's real cover",
+                 f"{combo} · {detail} · paired against the same lines sung by the target singer (not used in training)")
+    fig.subplots_adjust(top=1 - 1.0 / fig.get_figheight())
+    name = f"reference_curve_{args.run}" + ("" if combo == BASELINE_COMBO else f"_{combo}")
+    save_figure(fig, out_dir, name, args.formats, args.dpi)
+    write_reference_table(args, rows, combo, out_dir, name)
+
+
+def write_reference_table(args: argparse.Namespace, rows: pd.DataFrame, combo: str, out_dir: Path, name: str) -> None:
+    header = ["epoch", "sim_ref ↑", "Δ vs source", "mcd_ref ↓", "Δ vs source", "f0_corr_ref"]
+    bests = {m: reference_best(rows, m) for m in ("sim_ref", "mcd_ref")}
+    table_rows = []
+    for _, row in rows.iterrows():
+        cells = [str(int(row["epoch"]))]
+        for metric, sign in (("sim_ref", 1), ("mcd_ref", -1)):
+            text = fmt_value(row[metric], REFERENCE_METRICS[metric].fmt)
+            best = bests[metric]
+            cells.append(f"**{text}**" if best is not None and int(best["epoch"]) == int(row["epoch"]) else text)
+            cells.append(fmt_value(sign * (row[metric] - row[REFERENCE_BASELINES[metric]]), "+.3f"))
+        cells.append(fmt_value(row["f0_corr_ref"], ".3f"))
+        table_rows.append(cells)
+    first = rows.iloc[0]
+    text = [
+        f"# {args.run}: paired scores against the real cover", "",
+        markdown_table(header, table_rows, ["r"] * len(header)), "",
+        f"- Inference setting: `{combo}`. Bold = best epoch. Δ is the improvement over the unconverted source "
+        "(sim: converted − source, mcd: source − converted; positive = closer to the cover).",
+        f"- Source baseline: sim_ref {fmt_value(first['sim_ref_source'], '.3f')}, mcd_ref "
+        f"{fmt_value(first['mcd_ref_source'], '.2f')}; cover self-similarity (LOO centroid) "
+        f"{fmt_value(first['sim_ref_self'], '.3f')}. The self value is centroid-based (window vs the other "
+        "cover windows); its like-for-like counterpart is sim_ref_centroid in runs/<run>/reference/metrics.csv, not "
+        "the paired sim_ref.",
+        "- f0_corr_ref is information only: the cover is a different performance, so pitch differences are expected.",
+        f"- Reproduce: `{command_line()}`",
+    ]
+    write_table(out_dir, name, "\n".join(text))
+
+
 # ---------------------------------------------------------------- main
 
 
 def main() -> None:
     args = parse_args()
     setup_style()
-    df = load_runs(repo_path(args.runs_csv))
     out_dir = repo_path(args.out_dir)
+    if args.command == "reference-curve":
+        reference_curve(args, out_dir)
+        return
+    df = load_runs(repo_path(args.runs_csv))
     handlers = {
         "epoch-curve": epoch_curve,
         "pareto": pareto,
