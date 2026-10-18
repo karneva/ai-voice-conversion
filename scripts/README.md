@@ -205,6 +205,43 @@ evaluation\env\python.exe scripts/make_cover.py --song "dataset/private/cover_in
 - 기본 출력: `dataset/private/covers/<song_id>__<run>_<E>e_t<+N>.mp3` (`song_id`는 `slugify(곡 파일 stem)`). `--keep-intermediates`면 `<출력 stem>_work/`(Applio 입력·출력, `applio_infer.log`, 시프트한 반주)를 남긴다. 실패하면 작업 폴더는 항상 남는다.
 - 옆에 같은 이름의 `.json`을 쓴다: `settings`(모델 태그, embedder, 추론 값, transpose와 출처, 반주 시프트와 방법, 믹스 값), `inputs`(곡·보컬·반주·reference 보컬·pth·index의 경로와 sha256), `separation`(`reused`/`separated`), `transpose_estimate`(두 트랙의 F0 중앙값·p10·p90·유성 초, `f0_median_semitones`, `chroma_offset`, `chroma_scores`[k=0..11], `chroma_margin`, `f0_pitch_class_offset`, `transpose`), `applio_command`, `mix`(`vocal_level_match_db`, `vocal_lag_ms`, `instrumental_lag_ms`: onset envelope 상호상관으로 잰 원본 대비 지연, 20 ms 넘으면 경고), `result`(출력을 다시 디코딩해서 잰 길이·LUFS·피크와 원곡 길이 차), `timings`.
 
+## 실제 커버와 짝지어 평가: eval_reference.py
+
+목표 가수가 source 곡을 직접 부른 음원(정답 커버)이 있으면, source 보컬 전체를 변환한 결과를 정답 커버의 **같은 소절**과 짝지어 비교한다. 정답 커버는 학습 데이터와 index에 넣지 않는다(`curate_vocals.py`가 `reference` 폴더를 거부한다). 같은 키여야 한다(transpose 0으로 변환한다).
+
+- 기본 입력: `--source dataset/private/separated/cover_input`, `--reference dataset/private/separated/reference`. 폴더를 주면 그 안의 `*_(vocals)_*.wav` 하나를 쓴다.
+- `align`(CPU, 10초 정도): 정답 커버를 1초 넘는 쉼에서 구간으로 나누고(6초 미만은 4초 이내 이웃과 합치고, 30초 넘으면 가운데 쉼에서 자른다), 구간마다 source 전체에 subsequence DTW를 한다. 특징은 20 ms 프레임의 CENS chroma + 파일별 표준화 MFCC + 보컬 활동도이고, 국소 템포 비는 0.5~2로 제한한다. 구간당 후보를 4개까지 뽑고, 후보 경로를 따라 두 트랙의 F0(pyworld DIO)가 100 cents 안에 드는 비율 `pitch_agreement`로 검증한다. `match_score = pitch_agreement − cost_ratio`(cost_ratio = 그 경로의 끝 비용 ÷ 모든 끝 위치 비용의 중앙값)가 0.12 이상인 후보만 받고, 받은 후보 중에서는 곡 순서를 거스르는 점프에 벌점(0.05)을 주는 Viterbi로 고른다. 그래서 건너뛴 구간·순서를 바꾼 구간을 다루고, 같은 멜로디가 반복되는 절은 순서로 구분한다.
+  - 같은 키라는 가정이 검증의 핵심이다. 비용만으로는 다른 가수가 부른 같은 곡과 다른 곡을 가르지 못했다(규현의 다른 곡 8개, 100구간의 우연 매칭 cost_ratio가 0.50까지 내려가 정답 0.36~0.51과 겹쳤다). `match_score`는 정답 구간 0.22~0.46, 다른 곡 구간 최대 0.007이었다.
+  - 합성 테스트(GTSinger KO-Tenor-1 한 곡을 ±8% time-stretch하고 두 구간의 순서를 바꾸고 다른 곡 한 소절을 끼움): 시간 맵 오차 중앙값 10 ms, 99.8%가 100 ms 이내, 끼운 소절은 거부.
+- 결과는 `results/cache/reference_alignment_<song>.json`(입력 두 파일의 sha256과 정렬 설정으로 만든 `key`가 같으면 재사용)과 `runs/<run_id>/reference/alignment.json`에 쓴다. 구간마다 `ref_start_s/ref_end_s`, `src_start_s/src_end_s`, `tempo_ratio`, `cost_ratio`, `pitch_agreement`, `match_score`, 후보 목록, 0.1초 간격 시간 맵 `map: [[ref_s, src_s], ...]`가 들어간다. `--plot`은 비용 행렬 위에 고른 경로(실선)와 다른 후보(빨간 점선)를 그린 `alignment_<song>.png`를 쓴다.
+- `convert`(GPU): `Applio/logs/<model_run_id>/`의 체크포인트로 source 보컬 전체를 변환한다(`make_cover.py`의 `resolve_model`·`convert`). 추론 설정은 `runs/<run_id>/run.json`의 infer grid 전체이고, `--index-rate`/`--protect`를 주면 grid 첫 항목을 그 값으로 바꾼 한 조합만 돈다. 출력 `runs/<run_id>/reference/<E>e/<combo>/converted.wav` 옆 `converted.json`에 source·pth·index의 sha256과 설정을 남기고, 이것이 같으면 건너뛴다. 4분 곡 한 번에 VRAM이 약 5.9 GB까지 오르므로 다른 GPU 작업이 없을 때 돌린다(`--split-audio`는 약 4.5 GB).
+- `score`(GPU는 ECAPA·CREPE만): 매칭된 구간 안에서만, 유성음끼리 비교한다. 변환 결과는 source와 시간축이 같으므로 맵 하나로 모든 체크포인트를 채점한다.
+  - `sim_ref`: 정답 커버의 3초 창(1초 hop)과, 맵으로 옮긴 source 위치의 변환 결과 3초 창의 ECAPA cosine 평균. 두 창 모두 CREPE 유성 프레임이 50% 이상인 창만 쓰고, 창 목록은 정답 커버와 source만으로 정하므로 체크포인트마다 같다. `sim_ref_source`는 같은 창에서 변환하지 않은 source 보컬의 값(하한), `sim_ref_self`는 정답 커버 창과 그 창과 겹치지 않는 나머지 창 centroid의 cosine 평균(leave-one-out, 대략의 상한)이다. `sim_ref`는 같은 가사·멜로디의 창끼리 비교하므로 centroid 기준 값과 척도가 다르다(E1-base에서 짝 비교 0.62~0.66, centroid 기준 0.61~0.64). `sim_ref_self`와 같은 척도로 비교하려면 `metrics.csv`의 `sim_ref_centroid`(변환 창 vs 겹치지 않는 정답 커버 창 centroid)와 `sim_ref_source_centroid`를 본다.
+  - `mcd_ref`: 구간마다 맵 주위 ±0.3초 띠 안에서 mel-cepstrum(`eval_lib/mcd.py` 설정: 16 kHz, 8 ms hop, c1..c15)으로 DTW한 뒤, 두 프레임 모두 CREPE 유성이고 정답 커버 에너지가 최대 대비 40 dB 안인 짝의 MCD 평균. `mcd_ref_source`가 기준선이다. 같은 프로젝트 안에서만 비교한다.
+  - `f0_corr_ref`: 같은 짝에서 F0(log) Pearson 상관. 정답 커버는 다른 연주라 표현 차이가 당연하므로 **오류 지표가 아니고 참고용**이다.
+  - 개선량: `sim_ref_gain = sim_ref − sim_ref_source`, `mcd_ref_gain = mcd_ref_source − mcd_ref`(둘 다 양수가 정답 커버에 더 가까움).
+  - 출력별 `scores.json`(구간별 MCD·F0 상관, 창별 cosine)은 변환 결과 sha256·정렬 key·평가 설정이 같으면 재사용한다(`--force`로 다시 계산). F0는 파일 sha256별로 `results/cache/reference_f0/`에 캐시한다.
+- 정렬 맵 확인: 사랑합니다(팀 → 규현 커버)에서 각 3초 창의 CREPE 피치 곡선을 ±400 ms 밀어 가며 맞춘 잔여 지연이 중앙값 10 ms, 95%가 100 ms 이내였다(창 82개).
+
+```powershell
+evaluation\env\python.exe scripts/eval_reference.py align --run E1-base --plot
+evaluation\env\python.exe scripts/eval_reference.py convert --run E1-base --epochs 20,100,200,300,400,500
+evaluation\env\python.exe scripts/eval_reference.py score --run E1-base --epochs 20,100,200,300,400,500
+evaluation\env\python.exe scripts/report.py reference-curve --run E1-base
+```
+
+`all`은 세 단계를 이어서 한다.
+
+| 파일 | 내용 |
+| --- | --- |
+| `runs/<run_id>/reference/metrics.csv` | (epoch, combo)마다 한 행: `run_id, epoch, step, combo, n_windows, aligned_s, voiced_both_s, n_mcd_frames, sim_ref, sim_ref_source, sim_ref_gain, sim_ref_self, sim_ref_centroid, sim_ref_source_centroid, mcd_ref, mcd_ref_source, mcd_ref_gain, f0_corr_ref, f0_corr_ref_source, converted_path, converted_sha256, alignment_key, eval_version` |
+| `runs/<run_id>/reference/baseline.json` | source 기준선, 창 목록(정답 커버·source 중심 시각), 단계별 시간·VRAM |
+| `results/reference.csv` | `run_id, epoch, combo, n_windows, aligned_s, sim_ref, sim_ref_source, sim_ref_self, mcd_ref, mcd_ref_source, f0_corr_ref, eval_version`. 앞의 세 열이 같은 행은 덮어쓴다. `aligned_s`는 매칭된 정답 커버 구간 길이의 합(초) |
+| `results/figures/reference_curve_<run>.png`, `results/tables/reference_curve_<run>.md` | `report.py reference-curve`: 에폭별 `sim_ref`·`mcd_ref`, 회색 점선 = 변환 전 source, 점 = 정답 커버 self(LOO). `--f0`면 `f0_corr_ref` 패널 추가 |
+
+- 변환 결과 wav와 `_work/`(source 보컬 사본)는 `.gitignore`로 제외한다. json·csv·png만 남는다.
+- 정답 커버가 한 곡, 한 번의 연주라 창 수(수십 개)가 적다. 체크포인트 간 작은 차이는 잡음일 수 있다.
+
 ## 보컬 분리 임시 파일과 학습 금지 폴더
 
 - `separate_vocals.py`는 m4a·mp3 같은 압축 파일을 출력 폴더 안의 숨김 임시 폴더(`<output>/.decode_*`)에 WAV로 풀고, 끝나면 지운다. 개인 음원이 레포 밖(`%TEMP%`)으로 복사되지 않게 하려는 것이다. 숨김 폴더라 `build_manifest.py`·`speaker_outliers.py`는 이 폴더를 읽지 않는다.
