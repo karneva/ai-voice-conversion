@@ -84,6 +84,7 @@ runs/<run_id>/
 - `run_experiment.py infer`는 출력 파일이 있어도 `_sources.json`의 sha256·transpose가 지금 `clips.csv`의 클립과 다르면(또는 기록이 없으면) 다시 변환한다.
 - `evaluate.py run`은 `_sources.json`과 다른 출력이 하나라도 있으면 채점을 거부한다. 기록이 없는 출력은 경고만 하고 채점한다.
 - 클립별 지표 CSV에는 `output_sha256`, `reference_sha256`, `ref_chars`(정규화한 CER 기준 글자 수)도 들어간다. `--skip-existing`은 두 해시와 transpose가 지금 파일과 같을 때만 그 CSV를 재사용한다.
+- 받아쓰기 텍스트(`ref_text`, `asr_text`, `source_text`)는 가사를 담을 수 있어서 같은 폴더의 `<combo>.text.csv`에 따로 쓰고 git에서 제외한다. 다시 집계할 때(`--skip-existing`)는 이 파일에서 텍스트를 읽어 corpus CER을 계산하므로, 지우면 해당 CSV를 다시 채점한다.
 
 - `<set>`은 `source_eval`(교차 변환) 또는 `heldout`(재구성)이다.
 - `<combo>`는 추론 설정을 나타내는 태그로, 형식은 `f0-<method>_ir<index_rate:.2f>_p<protect:.2f>_ve<volume_envelope:.2f>`이다. 예: `f0-rmvpe_ir0.30_p0.33_ve1.00`

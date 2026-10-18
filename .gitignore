@@ -41,3 +41,5 @@ results/figures/*.svg
 *.log
 !runs/*/commands.log
 *.tmp
+# Transcript sidecars of per-clip metrics (may contain lyrics)
+runs/**/*.text.csv

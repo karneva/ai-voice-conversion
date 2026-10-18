@@ -57,10 +57,12 @@ CLIP_COLUMNS = [
     "sim_target", "sim_source",
     "f0_rmse_cents", "gpe50", "octave_err", "vuv_err", "fpc",
     "voiced_frames_ref", "voiced_frames_out", "voiced_frames_both",
-    "cer", "cer_source", "ref_kind", "ref_chars", "ref_text", "asr_text", "source_text",
+    "cer", "cer_source", "ref_kind", "ref_chars",
     "utmos", "utmos_source", "singmos", "singmos_source",
     "mcd",
 ]
+# Transcripts can hold song lyrics, so they live in a gitignored sidecar (<combo>.text.csv), not the metric CSV.
+TEXT_COLUMNS = ["clip_id", "ref_text", "asr_text", "source_text"]
 MEAN_COLUMNS = ("sim_target", "sim_source", "f0_rmse_cents", "gpe50", "octave_err", "vuv_err", "fpc", "mcd")
 
 COMBO_RE = re.compile(
@@ -698,10 +700,32 @@ def upsert_runs(ws: Workspace, new_rows: list[dict[str, Any]]) -> Path:
     return path
 
 
+def text_csv_path(csv_path: Path) -> Path:
+    return csv_path.with_name(f"{csv_path.stem}.text.csv")
+
+
+def write_clip_csvs(csv_path: Path, rows: list[dict[str, Any]]) -> None:
+    write_csv(csv_path, CLIP_COLUMNS, rows)
+    write_csv(text_csv_path(csv_path), TEXT_COLUMNS, rows)
+
+
+def read_clip_rows(csv_path: Path) -> list[dict[str, str]]:
+    """Per-clip metrics joined with their transcripts (older CSVs carry the text columns inline)."""
+    rows = read_csv(csv_path)
+    texts_path = text_csv_path(csv_path)
+    if texts_path.exists():
+        texts = {row["clip_id"]: row for row in read_csv(texts_path)}
+        for row in rows:
+            row.update({k: v for k, v in texts.get(row["clip_id"], {}).items() if k != "clip_id"})
+    return rows
+
+
 def has_complete_csv(group: Group, with_mos: bool) -> bool:
     """A per-clip CSV is reusable only if it scored exactly these output and reference files."""
     if not group.csv_path.exists():
         return False
+    if not text_csv_path(group.csv_path).exists() and "asr_text" not in read_csv(group.csv_path)[0]:
+        return False  # transcripts are needed to recompute corpus CER
     rows = read_csv(group.csv_path)
     if {r["clip_id"] for r in rows} != {p.clip.clip_id for p in group.pairs}:
         return False
@@ -725,11 +749,11 @@ def finish_groups(
     aggregates = []
     for group in groups:
         rows = clip_rows(ws, group)
-        write_csv(group.csv_path, CLIP_COLUMNS, rows)
+        write_clip_csvs(group.csv_path, rows)
         aggregates.append(aggregate(group, rows, calib))
         log(f"wrote {ws.rel(group.csv_path)} ({len(rows)} clip(s))")
     for group in reused:
-        aggregates.append(aggregate(group, read_csv(group.csv_path), calib))
+        aggregates.append(aggregate(group, read_clip_rows(group.csv_path), calib))
         log(f"reused {ws.rel(group.csv_path)}")
     if not aggregates:
         log("nothing to write")
