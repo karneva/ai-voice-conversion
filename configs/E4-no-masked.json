@@ -1,0 +1,6 @@
+{
+  "base": "baseline.json",
+  "run_id": "E4-no-masked",
+  "dataset_dir": "dataset/private/train_E4-no-masked",
+  "description": "E4: Baseline-0 without the six 복면가왕 live stages (crowd noise, live mix). Keeps 킬링보이스 (solo live medley). Same held-out and source_eval sets as E1-base; 36.6 min of training audio vs 62.7 min."
+}

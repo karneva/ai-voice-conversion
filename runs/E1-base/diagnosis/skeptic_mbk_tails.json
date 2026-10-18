@@ -1,0 +1,702 @@
+[
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 64.58,
+"dur": 2.53,
+"rel_db": 2.0,
+"crepe_per": 0.38,
+"crepe_f0": 417.0,
+"prev_note_hz": 493.0,
+"flat": 0.002
+},
+{
+"file": "한숨_Breathe_147144ab",
+"start": 271.93,
+"dur": 1.68,
+"rel_db": 8.3,
+"crepe_per": 0.34,
+"crepe_f0": 350.0,
+"prev_note_hz": 322.0,
+"flat": 0.045
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 113.25,
+"dur": 1.43,
+"rel_db": 2.2,
+"crepe_per": 0.07,
+"crepe_f0": 684.0,
+"prev_note_hz": 571.0,
+"flat": 0.027
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 58.52,
+"dur": 1.25,
+"rel_db": 2.5,
+"crepe_per": 0.38,
+"crepe_f0": 369.0,
+"prev_note_hz": 360.0,
+"flat": 0.005
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 57.31,
+"dur": 1.2,
+"rel_db": 1.8,
+"crepe_per": 0.11,
+"crepe_f0": 570.0,
+"prev_note_hz": 584.0,
+"flat": 0.007
+},
+{
+"file": "오르막길_Uphill_c9f779c8",
+"start": 6.81,
+"dur": 1.2,
+"rel_db": 11.6,
+"crepe_per": 0.12,
+"crepe_f0": 1033.0,
+"prev_note_hz": 724.0,
+"flat": 0.001
+},
+{
+"file": "바람기억_Memory_Of_The_Wind_701747e6",
+"start": 0.0,
+"dur": 1.05,
+"rel_db": 1.7,
+"crepe_per": 0.26,
+"crepe_f0": 797.0,
+"prev_note_hz": null,
+"flat": 0.004
+},
+{
+"file": "한숨_Breathe_147144ab",
+"start": 261.35,
+"dur": 0.93,
+"rel_db": 7.1,
+"crepe_per": 0.58,
+"crepe_f0": 416.0,
+"prev_note_hz": 333.0,
+"flat": 0.01
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 93.76,
+"dur": 0.85,
+"rel_db": 1.1,
+"crepe_per": 0.47,
+"crepe_f0": 438.0,
+"prev_note_hz": 383.0,
+"flat": 0.012
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 31.73,
+"dur": 0.82,
+"rel_db": -1.7,
+"crepe_per": 0.35,
+"crepe_f0": 415.0,
+"prev_note_hz": 435.0,
+"flat": 0.001
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 34.91,
+"dur": 0.8,
+"rel_db": 1.1,
+"crepe_per": 0.48,
+"crepe_f0": 395.0,
+"prev_note_hz": 529.0,
+"flat": 0.032
+},
+{
+"file": "한숨_Breathe_147144ab",
+"start": 262.49,
+"dur": 0.75,
+"rel_db": 6.5,
+"crepe_per": 0.47,
+"crepe_f0": 374.0,
+"prev_note_hz": 418.0,
+"flat": 0.015
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 80.83,
+"dur": 0.67,
+"rel_db": 0.7,
+"crepe_per": 0.38,
+"crepe_f0": 260.0,
+"prev_note_hz": 254.0,
+"flat": 0.05
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 99.05,
+"dur": 0.66,
+"rel_db": 0.9,
+"crepe_per": 0.44,
+"crepe_f0": 385.0,
+"prev_note_hz": null,
+"flat": 0.028
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 72.51,
+"dur": 0.64,
+"rel_db": 0.9,
+"crepe_per": 0.1,
+"crepe_f0": 356.0,
+"prev_note_hz": 363.0,
+"flat": 0.069
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 44.32,
+"dur": 0.62,
+"rel_db": 1.0,
+"crepe_per": 0.08,
+"crepe_f0": 424.0,
+"prev_note_hz": 373.0,
+"flat": 0.014
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 39.37,
+"dur": 0.58,
+"rel_db": -0.8,
+"crepe_per": 0.23,
+"crepe_f0": 337.0,
+"prev_note_hz": null,
+"flat": 0.021
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 40.57,
+"dur": 0.58,
+"rel_db": -1.7,
+"crepe_per": 0.37,
+"crepe_f0": 291.0,
+"prev_note_hz": 291.0,
+"flat": 0.137
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 82.49,
+"dur": 0.58,
+"rel_db": 2.0,
+"crepe_per": 0.33,
+"crepe_f0": 402.0,
+"prev_note_hz": 526.0,
+"flat": 0.03
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 24.71,
+"dur": 0.55,
+"rel_db": 1.4,
+"crepe_per": 0.47,
+"crepe_f0": 263.0,
+"prev_note_hz": 295.0,
+"flat": 0.062
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 89.53,
+"dur": 0.55,
+"rel_db": 1.6,
+"crepe_per": 0.02,
+"crepe_f0": 355.0,
+"prev_note_hz": 291.0,
+"flat": 0.013
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 102.46,
+"dur": 0.54,
+"rel_db": 0.9,
+"crepe_per": 0.66,
+"crepe_f0": 266.0,
+"prev_note_hz": 435.0,
+"flat": 0.043
+},
+{
+"file": "오르막길_Uphill_b3a9dfac",
+"start": 128.79,
+"dur": 0.53,
+"rel_db": 3.2,
+"crepe_per": 0.05,
+"crepe_f0": 1018.0,
+"prev_note_hz": 254.0,
+"flat": 0.003
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 26.6,
+"dur": 0.52,
+"rel_db": 2.0,
+"crepe_per": 0.38,
+"crepe_f0": 409.0,
+"prev_note_hz": 537.0,
+"flat": 0.044
+},
+{
+"file": "한숨_Breathe_147144ab",
+"start": 263.39,
+"dur": 0.52,
+"rel_db": 5.0,
+"crepe_per": 0.5,
+"crepe_f0": 370.0,
+"prev_note_hz": 376.0,
+"flat": 0.024
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 88.04,
+"dur": 0.51,
+"rel_db": 1.8,
+"crepe_per": 0.31,
+"crepe_f0": 377.0,
+"prev_note_hz": 519.0,
+"flat": 0.026
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 60.89,
+"dur": 0.51,
+"rel_db": -2.2,
+"crepe_per": 0.04,
+"crepe_f0": 552.0,
+"prev_note_hz": 278.0,
+"flat": 0.004
+},
+{
+"file": "오르막길_Uphill_b3a9dfac",
+"start": 131.25,
+"dur": 0.48,
+"rel_db": -2.6,
+"crepe_per": 0.13,
+"crepe_f0": 911.0,
+"prev_note_hz": 101.0,
+"flat": 0.003
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 22.3,
+"dur": 0.47,
+"rel_db": -1.5,
+"crepe_per": 0.26,
+"crepe_f0": 299.0,
+"prev_note_hz": 277.0,
+"flat": 0.014
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 78.13,
+"dur": 0.45,
+"rel_db": -2.0,
+"crepe_per": 0.21,
+"crepe_f0": 292.0,
+"prev_note_hz": 274.0,
+"flat": 0.004
+},
+{
+"file": "숨_Breath_ab3fc7ab",
+"start": 155.52,
+"dur": 0.44,
+"rel_db": 5.9,
+"crepe_per": 0.29,
+"crepe_f0": 415.0,
+"prev_note_hz": 318.0,
+"flat": 0.012
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 74.46,
+"dur": 0.43,
+"rel_db": -0.4,
+"crepe_per": 0.42,
+"crepe_f0": 436.0,
+"prev_note_hz": 345.0,
+"flat": 0.035
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 22.81,
+"dur": 0.42,
+"rel_db": 1.6,
+"crepe_per": 0.11,
+"crepe_f0": 420.0,
+"prev_note_hz": null,
+"flat": 0.031
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 34.31,
+"dur": 0.42,
+"rel_db": -0.7,
+"crepe_per": 0.3,
+"crepe_f0": 387.0,
+"prev_note_hz": 382.0,
+"flat": 0.031
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 78.65,
+"dur": 0.41,
+"rel_db": 1.3,
+"crepe_per": 0.15,
+"crepe_f0": 328.0,
+"prev_note_hz": null,
+"flat": 0.019
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 42.01,
+"dur": 0.41,
+"rel_db": 2.1,
+"crepe_per": 0.11,
+"crepe_f0": 710.0,
+"prev_note_hz": 343.0,
+"flat": 0.004
+},
+{
+"file": "에너제틱_Energetic_7d331252",
+"start": 77.34,
+"dur": 0.4,
+"rel_db": 4.6,
+"crepe_per": 0.2,
+"crepe_f0": 377.0,
+"prev_note_hz": 308.0,
+"flat": 0.027
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 60.11,
+"dur": 0.4,
+"rel_db": 2.6,
+"crepe_per": 0.31,
+"crepe_f0": 662.0,
+"prev_note_hz": 435.0,
+"flat": 0.022
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 8.71,
+"dur": 0.39,
+"rel_db": 2.2,
+"crepe_per": 0.28,
+"crepe_f0": 370.0,
+"prev_note_hz": 433.0,
+"flat": 0.06
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 8.12,
+"dur": 0.38,
+"rel_db": 0.2,
+"crepe_per": 0.42,
+"crepe_f0": 358.0,
+"prev_note_hz": 283.0,
+"flat": 0.157
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 14.61,
+"dur": 0.38,
+"rel_db": -0.5,
+"crepe_per": 0.49,
+"crepe_f0": 435.0,
+"prev_note_hz": 353.0,
+"flat": 0.233
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 16.0,
+"dur": 0.38,
+"rel_db": -2.3,
+"crepe_per": 0.44,
+"crepe_f0": 284.0,
+"prev_note_hz": 269.0,
+"flat": 0.008
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 85.92,
+"dur": 0.37,
+"rel_db": -0.6,
+"crepe_per": 0.72,
+"crepe_f0": 280.0,
+"prev_note_hz": 437.0,
+"flat": 0.032
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_026321be",
+"start": 105.79,
+"dur": 0.37,
+"rel_db": 1.9,
+"crepe_per": 0.03,
+"crepe_f0": 327.0,
+"prev_note_hz": 292.0,
+"flat": 0.011
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 4.75,
+"dur": 0.36,
+"rel_db": -0.5,
+"crepe_per": 0.36,
+"crepe_f0": 351.0,
+"prev_note_hz": 387.0,
+"flat": 0.029
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 107.26,
+"dur": 0.35,
+"rel_db": 1.8,
+"crepe_per": 0.24,
+"crepe_f0": 414.0,
+"prev_note_hz": 531.0,
+"flat": 0.057
+},
+{
+"file": "오르막길_Uphill_b3a9dfac",
+"start": 130.78,
+"dur": 0.35,
+"rel_db": -1.8,
+"crepe_per": 0.35,
+"crepe_f0": 700.0,
+"prev_note_hz": 279.0,
+"flat": 0.002
+},
+{
+"file": "한숨_Breathe_147144ab",
+"start": 259.76,
+"dur": 0.35,
+"rel_db": -2.0,
+"crepe_per": 0.14,
+"crepe_f0": 411.0,
+"prev_note_hz": 380.0,
+"flat": 0.005
+},
+{
+"file": "한숨_Breathe_147144ab",
+"start": 278.9,
+"dur": 0.35,
+"rel_db": 5.8,
+"crepe_per": 0.25,
+"crepe_f0": 496.0,
+"prev_note_hz": 321.0,
+"flat": 0.023
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 50.98,
+"dur": 0.35,
+"rel_db": 0.8,
+"crepe_per": 0.15,
+"crepe_f0": 367.0,
+"prev_note_hz": 378.0,
+"flat": 0.063
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 104.59,
+"dur": 0.34,
+"rel_db": 1.8,
+"crepe_per": 0.29,
+"crepe_f0": 420.0,
+"prev_note_hz": 527.0,
+"flat": 0.055
+},
+{
+"file": "오르막길_Uphill_b3a9dfac",
+"start": 128.33,
+"dur": 0.34,
+"rel_db": 4.6,
+"crepe_per": 0.14,
+"crepe_f0": 1034.0,
+"prev_note_hz": 247.0,
+"flat": 0.002
+},
+{
+"file": "오르막길_Uphill_b3a9dfac",
+"start": 171.54,
+"dur": 0.34,
+"rel_db": 4.9,
+"crepe_per": 0.09,
+"crepe_f0": 658.0,
+"prev_note_hz": 330.0,
+"flat": 0.007
+},
+{
+"file": "한숨_Breathe_147144ab",
+"start": 182.57,
+"dur": 0.34,
+"rel_db": -0.4,
+"crepe_per": 0.1,
+"crepe_f0": 259.0,
+"prev_note_hz": 301.0,
+"flat": 0.0
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 45.44,
+"dur": 0.33,
+"rel_db": -1.4,
+"crepe_per": 0.23,
+"crepe_f0": 278.0,
+"prev_note_hz": 255.0,
+"flat": 0.011
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 90.76,
+"dur": 0.33,
+"rel_db": 2.1,
+"crepe_per": 0.2,
+"crepe_f0": 439.0,
+"prev_note_hz": 532.0,
+"flat": 0.031
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 105.35,
+"dur": 0.33,
+"rel_db": -3.1,
+"crepe_per": 0.08,
+"crepe_f0": 260.0,
+"prev_note_hz": 383.0,
+"flat": 0.042
+},
+{
+"file": "오르막길_Uphill_b3a9dfac",
+"start": 152.45,
+"dur": 0.33,
+"rel_db": -2.6,
+"crepe_per": 0.31,
+"crepe_f0": 212.0,
+"prev_note_hz": 246.0,
+"flat": 0.123
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 50.57,
+"dur": 0.33,
+"rel_db": -0.2,
+"crepe_per": 0.57,
+"crepe_f0": 370.0,
+"prev_note_hz": 408.0,
+"flat": 0.049
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 68.01,
+"dur": 0.33,
+"rel_db": 2.4,
+"crepe_per": 0.75,
+"crepe_f0": 804.0,
+"prev_note_hz": 418.0,
+"flat": 0.023
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 33.94,
+"dur": 0.32,
+"rel_db": -0.8,
+"crepe_per": 0.04,
+"crepe_f0": 375.0,
+"prev_note_hz": 330.0,
+"flat": 0.006
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 96.29,
+"dur": 0.32,
+"rel_db": 2.3,
+"crepe_per": 0.17,
+"crepe_f0": 436.0,
+"prev_note_hz": 441.0,
+"flat": 0.019
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 98.54,
+"dur": 0.32,
+"rel_db": -2.5,
+"crepe_per": 0.62,
+"crepe_f0": 339.0,
+"prev_note_hz": null,
+"flat": 0.031
+},
+{
+"file": "한숨_Breathe_147144ab",
+"start": 211.46,
+"dur": 0.32,
+"rel_db": -0.7,
+"crepe_per": 0.13,
+"crepe_f0": 291.0,
+"prev_note_hz": 300.0,
+"flat": 0.02
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_026321be",
+"start": 95.26,
+"dur": 0.32,
+"rel_db": 0.1,
+"crepe_per": 0.47,
+"crepe_f0": 322.0,
+"prev_note_hz": 364.0,
+"flat": 0.047
+},
+{
+"file": "오르막길_Uphill_b3a9dfac",
+"start": 209.7,
+"dur": 0.31,
+"rel_db": 3.7,
+"crepe_per": 0.04,
+"crepe_f0": 380.0,
+"prev_note_hz": 293.0,
+"flat": 0.008
+},
+{
+"file": "한숨_Breathe_147144ab",
+"start": 260.83,
+"dur": 0.31,
+"rel_db": 7.4,
+"crepe_per": 0.54,
+"crepe_f0": 410.0,
+"prev_note_hz": 374.0,
+"flat": 0.024
+},
+{
+"file": "혜야_Y_si_Fuera_Ella_32db69f8",
+"start": 56.97,
+"dur": 0.31,
+"rel_db": 0.1,
+"crepe_per": 0.22,
+"crepe_f0": 367.0,
+"prev_note_hz": 268.0,
+"flat": 0.032
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 6.98,
+"dur": 0.3,
+"rel_db": 1.6,
+"crepe_per": 0.28,
+"crepe_f0": 303.0,
+"prev_note_hz": 377.0,
+"flat": 0.044
+},
+{
+"file": "에너제틱_Energetic_404b4d6f",
+"start": 18.76,
+"dur": 0.3,
+"rel_db": 1.4,
+"crepe_per": 0.13,
+"crepe_f0": 436.0,
+"prev_note_hz": 352.0,
+"flat": 0.223
+}
+]

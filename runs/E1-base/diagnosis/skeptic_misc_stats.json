@@ -1,0 +1,76 @@
+{
+ "limiter": {
+  "frac_samples_reducing": 4.95113820726019e-07,
+  "frac_in_C": 4.199208785080715e-07,
+  "min_gain_db": -0.1437805875583589,
+  "inst_leak_coef_C_median": -0.00043211208163141074,
+  "inst_leak_coef_C_p95abs": 0.09435248452492102
+ },
+ "src_leak": {
+  "hf_4_8k_db": {
+   "rho_conv_vs_src_pitch_partialled": 0.4448316902007448,
+   "rho_low_notes": 0.5299392923729009
+  },
+  "alpha_db": {
+   "rho_conv_vs_src_pitch_partialled": 0.6072529473195495,
+   "rho_low_notes": 0.617129381010541
+  },
+  "h1h2": {
+   "rho_conv_vs_src_pitch_partialled": 0.65079351318204,
+   "rho_low_notes": 0.36705641497929564
+  }
+ },
+ "loud_unvoiced": {
+  "studio": {
+   "loud_uv_per_voiced_min_s": 0.28063055259966846,
+   "median_flat_1_8k": 0.16280123591423035,
+   "median_hf_6_16k": -1.4313161373138428,
+   "share_within_1s_after_high_note": 0.6613756613756613,
+   "runs_longer_than_300ms": 0,
+   "longest_run_s": 0.2
+  },
+  "mbk": {
+   "loud_uv_per_voiced_min_s": 4.072935404742436,
+   "median_flat_1_8k": 0.026613596826791763,
+   "median_hf_6_16k": -24.256881713867188,
+   "share_within_1s_after_high_note": 0.7210310768489521,
+   "runs_longer_than_300ms": 68,
+   "longest_run_s": 2.5300000000000002
+  },
+  "kv": {
+   "loud_uv_per_voiced_min_s": 1.685934124246674,
+   "median_flat_1_8k": 0.257785439491272,
+   "median_hf_6_16k": -9.688029289245605,
+   "share_within_1s_after_high_note": 0.3682553956834532,
+   "runs_longer_than_300ms": 4,
+   "longest_run_s": 0.44
+  }
+ },
+ "A_window_70.8_71.3": {
+  "src": {
+   "crepe_per_mean": 0.433966726064682,
+   "frac_per>0.5": 0.52
+  },
+  "srcmp3": {
+   "crepe_per_mean": 0.43439537286758423,
+   "frac_per>0.5": 0.52
+  },
+  "c500": {
+   "crepe_per_mean": 0.8292949795722961,
+   "frac_per>0.5": 0.92
+  },
+  "c300": {
+   "crepe_per_mean": 0.8077683448791504,
+   "frac_per>0.5": 0.9
+  }
+ },
+ "D_unvoiced_loud_src_frames": {
+  "n": 245,
+  "srcmp3_crepe_per>0.5": 0.0,
+  "srcmp3_harvest_voiced": 0.15510204081632653,
+  "c300_crepe_per>0.5": 0.37551020408163266,
+  "c300_harvest_voiced": 0.6857142857142857,
+  "c500_crepe_per>0.5": 0.3795918367346939,
+  "c500_harvest_voiced": 0.636734693877551
+ }
+}

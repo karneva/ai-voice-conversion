@@ -1,0 +1,3783 @@
+{
+  "run_id": "E4-no-masked",
+  "created_at": "2026-10-18T12:12:14+09:00",
+  "config_path": "configs/E4-no-masked.json",
+  "config": {
+    "run_id": "E4-no-masked",
+    "track": "private",
+    "dataset_dir": "dataset/private/train_E4-no-masked",
+    "description": "E4: Baseline-0 without the six 복면가왕 live stages (crowd noise, live mix). Keeps 킬링보이스 (solo live medley). Same held-out and source_eval sets as E1-base; 36.6 min of training audio vs 62.7 min.",
+    "preprocess": {
+      "sample_rate": 40000,
+      "cpu_cores": 8,
+      "cut_preprocess": "Automatic",
+      "process_effects": false,
+      "noise_reduction": false,
+      "noise_reduction_strength": 0.7,
+      "chunk_len": 3.0,
+      "overlap_len": 0.3,
+      "normalization_mode": "post"
+    },
+    "extract": {
+      "f0_method": "rmvpe",
+      "embedder_model": "contentvec",
+      "embedder_model_custom": null,
+      "gpu": "0",
+      "cpu_cores": 8,
+      "include_mutes": 2
+    },
+    "train": {
+      "vocoder": "HiFi-GAN",
+      "pretrained": "default",
+      "batch_size": 8,
+      "save_every_epoch": 10,
+      "total_epoch": 500,
+      "gpu": "0",
+      "index_algorithm": "Auto",
+      "checkpointing": false,
+      "cache_data_in_gpu": false
+    },
+    "infer": {
+      "grid": [
+        {
+          "f0_method": "rmvpe",
+          "index_rate": 0.3,
+          "protect": 0.33,
+          "volume_envelope": 1.0
+        }
+      ],
+      "checkpoints": "10,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360,380,400,420,440,460,480,500",
+      "sets": [
+        "source_eval",
+        "heldout"
+      ]
+    }
+  },
+  "model_run_id": "E4-no-masked",
+  "applio_logs": "Applio/logs/E4-no-masked",
+  "environment": {
+    "repo_commit": "bf941d1a87c66bead252e71984f0922c47c68bf1",
+    "repo_dirty": true,
+    "applio_version": "3.6.6",
+    "applio_git": "3.6.6-dirty",
+    "applio_precision": "fp16",
+    "gpu": {
+      "name": "NVIDIA GeForce RTX 4050 Laptop GPU",
+      "driver": "591.44",
+      "memory_total_mib": 6141
+    },
+    "python_runner": "3.12.15",
+    "python_applio": "Python 3.12.15",
+    "torch_applio": "2.11.0+cu128",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "updated_at": "2026-10-18T19:32:59+09:00",
+  "steps": {
+    "prepare": {
+      "status": "ok",
+      "started_at": "2026-10-18T12:12:16+09:00",
+      "dataset": {
+        "dir": "dataset/private/train_E4-no-masked",
+        "n_files": 18,
+        "total_mib": 277.2,
+        "fingerprint": "4c1cef60ab3ee2f7bc950286622597ce4b9cf50e89d33ef2a69f6b5bd834512a",
+        "manifest": "dataset/private/manifest.csv",
+        "manifest_sha256": "3716a50ef2dc4de24e421fa9a5941c82339d11507d2498654adcec605fc60ae4"
+      },
+      "counts": {
+        "sliced_audios": 728,
+        "f0": 728,
+        "f0_voiced": 728,
+        "extracted": 728
+      },
+      "model_info": {
+        "total_dataset_duration": "00:36:37",
+        "total_seconds": 2197.013975,
+        "embedder_model": "contentvec",
+        "speakers_id": 1
+      },
+      "extract_failed_slices": [],
+      "finished_at": "2026-10-18T12:13:27+09:00",
+      "duration_s": 70.4
+    },
+    "train": {
+      "status": "ok",
+      "started_at": "2026-10-18T12:13:27+09:00",
+      "resumed": false,
+      "resumed_from_epoch": null,
+      "pretrained": {
+        "spec": "default",
+        "g": {
+          "path": "Applio/rvc/models/pretraineds/hifi-gan/f0G40k.pth",
+          "sha256": "3b2c44035e782c4b14ddc0bede9e2f4a724d025cd073f736d4f43708453adfcb"
+        },
+        "d": {
+          "path": "Applio/rvc/models/pretraineds/hifi-gan/f0D40k.pth",
+          "sha256": "6b6ab091e70801b28e3f41f335f2fc5f3f35c75b39ae2628d419644ec2b0fa09"
+        }
+      },
+      "vram_before_mib": 0,
+      "epochs": [
+        {
+          "epoch": 1,
+          "step": 95,
+          "applio_s": 142,
+          "wall_s": 167.58,
+          "first_in_invocation": true
+        },
+        {
+          "epoch": 2,
+          "step": 190,
+          "applio_s": 62,
+          "wall_s": 62.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 3,
+          "step": 285,
+          "applio_s": 48,
+          "wall_s": 48.47,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 4,
+          "step": 380,
+          "applio_s": 55,
+          "wall_s": 55.41,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 5,
+          "step": 475,
+          "applio_s": 46,
+          "wall_s": 46.62,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 6,
+          "step": 570,
+          "applio_s": 46,
+          "wall_s": 46.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 7,
+          "step": 665,
+          "applio_s": 42,
+          "wall_s": 42.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 8,
+          "step": 760,
+          "applio_s": 46,
+          "wall_s": 46.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 9,
+          "step": 855,
+          "applio_s": 54,
+          "wall_s": 54.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 10,
+          "step": 950,
+          "applio_s": 78,
+          "wall_s": 78.0,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 11,
+          "step": 1045,
+          "applio_s": 43,
+          "wall_s": 45.11,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 12,
+          "step": 1140,
+          "applio_s": 46,
+          "wall_s": 46.38,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 13,
+          "step": 1235,
+          "applio_s": 41,
+          "wall_s": 41.91,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 14,
+          "step": 1330,
+          "applio_s": 42,
+          "wall_s": 42.62,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 15,
+          "step": 1425,
+          "applio_s": 46,
+          "wall_s": 46.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 16,
+          "step": 1520,
+          "applio_s": 46,
+          "wall_s": 46.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 17,
+          "step": 1615,
+          "applio_s": 50,
+          "wall_s": 50.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 18,
+          "step": 1710,
+          "applio_s": 42,
+          "wall_s": 42.45,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 19,
+          "step": 1805,
+          "applio_s": 42,
+          "wall_s": 42.89,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 20,
+          "step": 1900,
+          "applio_s": 48,
+          "wall_s": 48.14,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 21,
+          "step": 1995,
+          "applio_s": 46,
+          "wall_s": 48.75,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 22,
+          "step": 2090,
+          "applio_s": 43,
+          "wall_s": 43.45,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 23,
+          "step": 2185,
+          "applio_s": 42,
+          "wall_s": 42.5,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 24,
+          "step": 2280,
+          "applio_s": 42,
+          "wall_s": 42.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 25,
+          "step": 2375,
+          "applio_s": 43,
+          "wall_s": 43.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 26,
+          "step": 2470,
+          "applio_s": 42,
+          "wall_s": 42.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 27,
+          "step": 2565,
+          "applio_s": 42,
+          "wall_s": 42.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 28,
+          "step": 2660,
+          "applio_s": 43,
+          "wall_s": 43.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 29,
+          "step": 2755,
+          "applio_s": 41,
+          "wall_s": 41.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 30,
+          "step": 2850,
+          "applio_s": 44,
+          "wall_s": 44.14,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 31,
+          "step": 2945,
+          "applio_s": 43,
+          "wall_s": 45.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 32,
+          "step": 3040,
+          "applio_s": 42,
+          "wall_s": 42.09,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 33,
+          "step": 3135,
+          "applio_s": 43,
+          "wall_s": 43.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 34,
+          "step": 3230,
+          "applio_s": 43,
+          "wall_s": 43.52,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 35,
+          "step": 3325,
+          "applio_s": 42,
+          "wall_s": 42.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 36,
+          "step": 3420,
+          "applio_s": 42,
+          "wall_s": 42.64,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 37,
+          "step": 3515,
+          "applio_s": 42,
+          "wall_s": 42.95,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 38,
+          "step": 3610,
+          "applio_s": 43,
+          "wall_s": 43.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 39,
+          "step": 3705,
+          "applio_s": 47,
+          "wall_s": 47.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 40,
+          "step": 3800,
+          "applio_s": 42,
+          "wall_s": 42.83,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 41,
+          "step": 3895,
+          "applio_s": 42,
+          "wall_s": 44.56,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 42,
+          "step": 3990,
+          "applio_s": 42,
+          "wall_s": 42.74,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 43,
+          "step": 4085,
+          "applio_s": 41,
+          "wall_s": 41.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 44,
+          "step": 4180,
+          "applio_s": 43,
+          "wall_s": 43.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 45,
+          "step": 4275,
+          "applio_s": 46,
+          "wall_s": 46.47,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 46,
+          "step": 4370,
+          "applio_s": 42,
+          "wall_s": 42.75,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 47,
+          "step": 4465,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 48,
+          "step": 4560,
+          "applio_s": 42,
+          "wall_s": 42.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 49,
+          "step": 4655,
+          "applio_s": 42,
+          "wall_s": 42.72,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 50,
+          "step": 4750,
+          "applio_s": 43,
+          "wall_s": 43.86,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 51,
+          "step": 4845,
+          "applio_s": 42,
+          "wall_s": 44.42,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 52,
+          "step": 4940,
+          "applio_s": 43,
+          "wall_s": 43.8,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 53,
+          "step": 5035,
+          "applio_s": 43,
+          "wall_s": 43.11,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 54,
+          "step": 5130,
+          "applio_s": 46,
+          "wall_s": 46.45,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 55,
+          "step": 5225,
+          "applio_s": 43,
+          "wall_s": 43.23,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 56,
+          "step": 5320,
+          "applio_s": 43,
+          "wall_s": 43.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 57,
+          "step": 5415,
+          "applio_s": 42,
+          "wall_s": 42.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 58,
+          "step": 5510,
+          "applio_s": 43,
+          "wall_s": 43.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 59,
+          "step": 5605,
+          "applio_s": 43,
+          "wall_s": 43.11,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 60,
+          "step": 5700,
+          "applio_s": 44,
+          "wall_s": 44.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 61,
+          "step": 5795,
+          "applio_s": 43,
+          "wall_s": 45.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 62,
+          "step": 5890,
+          "applio_s": 42,
+          "wall_s": 42.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 63,
+          "step": 5985,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 64,
+          "step": 6080,
+          "applio_s": 43,
+          "wall_s": 43.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 65,
+          "step": 6175,
+          "applio_s": 42,
+          "wall_s": 42.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 66,
+          "step": 6270,
+          "applio_s": 42,
+          "wall_s": 42.95,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 67,
+          "step": 6365,
+          "applio_s": 43,
+          "wall_s": 43.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 68,
+          "step": 6460,
+          "applio_s": 42,
+          "wall_s": 42.61,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 69,
+          "step": 6555,
+          "applio_s": 43,
+          "wall_s": 43.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 70,
+          "step": 6650,
+          "applio_s": 44,
+          "wall_s": 44.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 71,
+          "step": 6745,
+          "applio_s": 43,
+          "wall_s": 44.86,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 72,
+          "step": 6840,
+          "applio_s": 43,
+          "wall_s": 43.62,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 73,
+          "step": 6935,
+          "applio_s": 42,
+          "wall_s": 42.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 74,
+          "step": 7030,
+          "applio_s": 42,
+          "wall_s": 42.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 75,
+          "step": 7125,
+          "applio_s": 43,
+          "wall_s": 43.02,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 76,
+          "step": 7220,
+          "applio_s": 41,
+          "wall_s": 41.86,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 77,
+          "step": 7315,
+          "applio_s": 43,
+          "wall_s": 43.42,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 78,
+          "step": 7410,
+          "applio_s": 42,
+          "wall_s": 42.95,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 79,
+          "step": 7505,
+          "applio_s": 41,
+          "wall_s": 41.67,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 80,
+          "step": 7600,
+          "applio_s": 44,
+          "wall_s": 44.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 81,
+          "step": 7695,
+          "applio_s": 43,
+          "wall_s": 45.31,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 82,
+          "step": 7790,
+          "applio_s": 46,
+          "wall_s": 46.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 83,
+          "step": 7885,
+          "applio_s": 42,
+          "wall_s": 42.42,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 84,
+          "step": 7980,
+          "applio_s": 42,
+          "wall_s": 42.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 85,
+          "step": 8075,
+          "applio_s": 43,
+          "wall_s": 43.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 86,
+          "step": 8170,
+          "applio_s": 43,
+          "wall_s": 43.38,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 87,
+          "step": 8265,
+          "applio_s": 42,
+          "wall_s": 42.44,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 88,
+          "step": 8360,
+          "applio_s": 42,
+          "wall_s": 42.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 89,
+          "step": 8455,
+          "applio_s": 43,
+          "wall_s": 43.38,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 90,
+          "step": 8550,
+          "applio_s": 43,
+          "wall_s": 43.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 91,
+          "step": 8645,
+          "applio_s": 42,
+          "wall_s": 44.69,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 92,
+          "step": 8740,
+          "applio_s": 43,
+          "wall_s": 43.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 93,
+          "step": 8835,
+          "applio_s": 42,
+          "wall_s": 42.67,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 94,
+          "step": 8930,
+          "applio_s": 43,
+          "wall_s": 43.05,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 95,
+          "step": 9025,
+          "applio_s": 43,
+          "wall_s": 43.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 96,
+          "step": 9120,
+          "applio_s": 43,
+          "wall_s": 43.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 97,
+          "step": 9215,
+          "applio_s": 43,
+          "wall_s": 43.12,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 98,
+          "step": 9310,
+          "applio_s": 42,
+          "wall_s": 42.56,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 99,
+          "step": 9405,
+          "applio_s": 43,
+          "wall_s": 43.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 100,
+          "step": 9500,
+          "applio_s": 44,
+          "wall_s": 44.23,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 101,
+          "step": 9595,
+          "applio_s": 42,
+          "wall_s": 45.23,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 102,
+          "step": 9690,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 103,
+          "step": 9785,
+          "applio_s": 43,
+          "wall_s": 43.08,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 104,
+          "step": 9880,
+          "applio_s": 43,
+          "wall_s": 43.02,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 105,
+          "step": 9975,
+          "applio_s": 43,
+          "wall_s": 43.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 106,
+          "step": 10070,
+          "applio_s": 43,
+          "wall_s": 43.05,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 107,
+          "step": 10165,
+          "applio_s": 42,
+          "wall_s": 42.7,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 108,
+          "step": 10260,
+          "applio_s": 42,
+          "wall_s": 42.66,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 109,
+          "step": 10355,
+          "applio_s": 43,
+          "wall_s": 42.98,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 110,
+          "step": 10450,
+          "applio_s": 44,
+          "wall_s": 44.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 111,
+          "step": 10545,
+          "applio_s": 43,
+          "wall_s": 44.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 112,
+          "step": 10640,
+          "applio_s": 42,
+          "wall_s": 42.55,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 113,
+          "step": 10735,
+          "applio_s": 43,
+          "wall_s": 43.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 114,
+          "step": 10830,
+          "applio_s": 43,
+          "wall_s": 43.31,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 115,
+          "step": 10925,
+          "applio_s": 42,
+          "wall_s": 42.81,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 116,
+          "step": 11020,
+          "applio_s": 42,
+          "wall_s": 42.97,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 117,
+          "step": 11115,
+          "applio_s": 43,
+          "wall_s": 43.09,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 118,
+          "step": 11210,
+          "applio_s": 42,
+          "wall_s": 42.83,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 119,
+          "step": 11305,
+          "applio_s": 43,
+          "wall_s": 43.0,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 120,
+          "step": 11400,
+          "applio_s": 43,
+          "wall_s": 43.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 121,
+          "step": 11495,
+          "applio_s": 43,
+          "wall_s": 45.08,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 122,
+          "step": 11590,
+          "applio_s": 43,
+          "wall_s": 43.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 123,
+          "step": 11685,
+          "applio_s": 42,
+          "wall_s": 42.67,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 124,
+          "step": 11780,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 125,
+          "step": 11875,
+          "applio_s": 43,
+          "wall_s": 43.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 126,
+          "step": 11970,
+          "applio_s": 42,
+          "wall_s": 42.38,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 127,
+          "step": 12065,
+          "applio_s": 43,
+          "wall_s": 43.45,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 128,
+          "step": 12160,
+          "applio_s": 43,
+          "wall_s": 43.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 129,
+          "step": 12255,
+          "applio_s": 42,
+          "wall_s": 42.59,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 130,
+          "step": 12350,
+          "applio_s": 43,
+          "wall_s": 43.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 131,
+          "step": 12445,
+          "applio_s": 43,
+          "wall_s": 45.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 132,
+          "step": 12540,
+          "applio_s": 44,
+          "wall_s": 44.83,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 133,
+          "step": 12635,
+          "applio_s": 44,
+          "wall_s": 44.7,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 134,
+          "step": 12730,
+          "applio_s": 45,
+          "wall_s": 45.09,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 135,
+          "step": 12825,
+          "applio_s": 45,
+          "wall_s": 45.02,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 136,
+          "step": 12920,
+          "applio_s": 44,
+          "wall_s": 44.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 137,
+          "step": 13015,
+          "applio_s": 42,
+          "wall_s": 42.75,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 138,
+          "step": 13110,
+          "applio_s": 43,
+          "wall_s": 43.05,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 139,
+          "step": 13205,
+          "applio_s": 43,
+          "wall_s": 42.97,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 140,
+          "step": 13300,
+          "applio_s": 43,
+          "wall_s": 43.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 141,
+          "step": 13395,
+          "applio_s": 43,
+          "wall_s": 45.25,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 142,
+          "step": 13490,
+          "applio_s": 43,
+          "wall_s": 43.31,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 143,
+          "step": 13585,
+          "applio_s": 42,
+          "wall_s": 42.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 144,
+          "step": 13680,
+          "applio_s": 43,
+          "wall_s": 43.12,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 145,
+          "step": 13775,
+          "applio_s": 42,
+          "wall_s": 42.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 146,
+          "step": 13870,
+          "applio_s": 43,
+          "wall_s": 43.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 147,
+          "step": 13965,
+          "applio_s": 43,
+          "wall_s": 43.34,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 148,
+          "step": 14060,
+          "applio_s": 42,
+          "wall_s": 42.5,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 149,
+          "step": 14155,
+          "applio_s": 43,
+          "wall_s": 43.31,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 150,
+          "step": 14250,
+          "applio_s": 44,
+          "wall_s": 44.83,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 151,
+          "step": 14345,
+          "applio_s": 43,
+          "wall_s": 44.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 152,
+          "step": 14440,
+          "applio_s": 42,
+          "wall_s": 42.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 153,
+          "step": 14535,
+          "applio_s": 43,
+          "wall_s": 43.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 154,
+          "step": 14630,
+          "applio_s": 43,
+          "wall_s": 43.09,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 155,
+          "step": 14725,
+          "applio_s": 43,
+          "wall_s": 43.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 156,
+          "step": 14820,
+          "applio_s": 43,
+          "wall_s": 43.02,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 157,
+          "step": 14915,
+          "applio_s": 43,
+          "wall_s": 43.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 158,
+          "step": 15010,
+          "applio_s": 43,
+          "wall_s": 43.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 159,
+          "step": 15105,
+          "applio_s": 46,
+          "wall_s": 46.86,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 160,
+          "step": 15200,
+          "applio_s": 44,
+          "wall_s": 44.31,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 161,
+          "step": 15295,
+          "applio_s": 43,
+          "wall_s": 45.48,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 162,
+          "step": 15390,
+          "applio_s": 43,
+          "wall_s": 43.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 163,
+          "step": 15485,
+          "applio_s": 43,
+          "wall_s": 43.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 164,
+          "step": 15580,
+          "applio_s": 42,
+          "wall_s": 42.73,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 165,
+          "step": 15675,
+          "applio_s": 42,
+          "wall_s": 42.86,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 166,
+          "step": 15770,
+          "applio_s": 43,
+          "wall_s": 43.09,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 167,
+          "step": 15865,
+          "applio_s": 42,
+          "wall_s": 42.64,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 168,
+          "step": 15960,
+          "applio_s": 43,
+          "wall_s": 43.0,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 169,
+          "step": 16055,
+          "applio_s": 43,
+          "wall_s": 43.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 170,
+          "step": 16150,
+          "applio_s": 44,
+          "wall_s": 43.98,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 171,
+          "step": 16245,
+          "applio_s": 42,
+          "wall_s": 44.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 172,
+          "step": 16340,
+          "applio_s": 43,
+          "wall_s": 43.53,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 173,
+          "step": 16435,
+          "applio_s": 42,
+          "wall_s": 42.38,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 174,
+          "step": 16530,
+          "applio_s": 43,
+          "wall_s": 43.31,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 175,
+          "step": 16625,
+          "applio_s": 42,
+          "wall_s": 42.56,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 176,
+          "step": 16720,
+          "applio_s": 42,
+          "wall_s": 42.42,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 177,
+          "step": 16815,
+          "applio_s": 43,
+          "wall_s": 43.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 178,
+          "step": 16910,
+          "applio_s": 40,
+          "wall_s": 40.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 179,
+          "step": 17005,
+          "applio_s": 43,
+          "wall_s": 43.05,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 180,
+          "step": 17100,
+          "applio_s": 44,
+          "wall_s": 44.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 181,
+          "step": 17195,
+          "applio_s": 42,
+          "wall_s": 44.0,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 182,
+          "step": 17290,
+          "applio_s": 43,
+          "wall_s": 43.73,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 183,
+          "step": 17385,
+          "applio_s": 43,
+          "wall_s": 43.5,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 184,
+          "step": 17480,
+          "applio_s": 41,
+          "wall_s": 41.97,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 185,
+          "step": 17575,
+          "applio_s": 43,
+          "wall_s": 43.41,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 186,
+          "step": 17670,
+          "applio_s": 42,
+          "wall_s": 42.83,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 187,
+          "step": 17765,
+          "applio_s": 42,
+          "wall_s": 42.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 188,
+          "step": 17860,
+          "applio_s": 42,
+          "wall_s": 42.89,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 189,
+          "step": 17955,
+          "applio_s": 42,
+          "wall_s": 42.58,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 190,
+          "step": 18050,
+          "applio_s": 43,
+          "wall_s": 43.97,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 191,
+          "step": 18145,
+          "applio_s": 43,
+          "wall_s": 45.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 192,
+          "step": 18240,
+          "applio_s": 42,
+          "wall_s": 42.05,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 193,
+          "step": 18335,
+          "applio_s": 42,
+          "wall_s": 42.76,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 194,
+          "step": 18430,
+          "applio_s": 43,
+          "wall_s": 43.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 195,
+          "step": 18525,
+          "applio_s": 41,
+          "wall_s": 41.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 196,
+          "step": 18620,
+          "applio_s": 43,
+          "wall_s": 43.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 197,
+          "step": 18715,
+          "applio_s": 43,
+          "wall_s": 43.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 198,
+          "step": 18810,
+          "applio_s": 41,
+          "wall_s": 41.95,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 199,
+          "step": 18905,
+          "applio_s": 43,
+          "wall_s": 43.53,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 200,
+          "step": 19000,
+          "applio_s": 44,
+          "wall_s": 44.62,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 201,
+          "step": 19095,
+          "applio_s": 42,
+          "wall_s": 44.08,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 202,
+          "step": 19190,
+          "applio_s": 42,
+          "wall_s": 42.88,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 203,
+          "step": 19285,
+          "applio_s": 42,
+          "wall_s": 42.58,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 204,
+          "step": 19380,
+          "applio_s": 43,
+          "wall_s": 43.12,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 205,
+          "step": 19475,
+          "applio_s": 43,
+          "wall_s": 43.02,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 206,
+          "step": 19570,
+          "applio_s": 41,
+          "wall_s": 41.69,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 207,
+          "step": 19665,
+          "applio_s": 42,
+          "wall_s": 42.95,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 208,
+          "step": 19760,
+          "applio_s": 43,
+          "wall_s": 43.48,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 209,
+          "step": 19855,
+          "applio_s": 41,
+          "wall_s": 41.59,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 210,
+          "step": 19950,
+          "applio_s": 43,
+          "wall_s": 43.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 211,
+          "step": 20045,
+          "applio_s": 43,
+          "wall_s": 44.86,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 212,
+          "step": 20140,
+          "applio_s": 42,
+          "wall_s": 42.66,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 213,
+          "step": 20235,
+          "applio_s": 43,
+          "wall_s": 43.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 214,
+          "step": 20330,
+          "applio_s": 43,
+          "wall_s": 43.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 215,
+          "step": 20425,
+          "applio_s": 42,
+          "wall_s": 42.67,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 216,
+          "step": 20520,
+          "applio_s": 43,
+          "wall_s": 42.97,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 217,
+          "step": 20615,
+          "applio_s": 43,
+          "wall_s": 43.0,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 218,
+          "step": 20710,
+          "applio_s": 43,
+          "wall_s": 43.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 219,
+          "step": 20805,
+          "applio_s": 43,
+          "wall_s": 43.01,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 220,
+          "step": 20900,
+          "applio_s": 43,
+          "wall_s": 43.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 221,
+          "step": 20995,
+          "applio_s": 43,
+          "wall_s": 45.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 222,
+          "step": 21090,
+          "applio_s": 43,
+          "wall_s": 43.34,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 223,
+          "step": 21185,
+          "applio_s": 43,
+          "wall_s": 43.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 224,
+          "step": 21280,
+          "applio_s": 45,
+          "wall_s": 45.53,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 225,
+          "step": 21375,
+          "applio_s": 43,
+          "wall_s": 43.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 226,
+          "step": 21470,
+          "applio_s": 43,
+          "wall_s": 43.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 227,
+          "step": 21565,
+          "applio_s": 43,
+          "wall_s": 43.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 228,
+          "step": 21660,
+          "applio_s": 42,
+          "wall_s": 42.64,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 229,
+          "step": 21755,
+          "applio_s": 43,
+          "wall_s": 43.05,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 230,
+          "step": 21850,
+          "applio_s": 44,
+          "wall_s": 44.05,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 231,
+          "step": 21945,
+          "applio_s": 43,
+          "wall_s": 44.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 232,
+          "step": 22040,
+          "applio_s": 43,
+          "wall_s": 43.61,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 233,
+          "step": 22135,
+          "applio_s": 43,
+          "wall_s": 43.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 234,
+          "step": 22230,
+          "applio_s": 42,
+          "wall_s": 42.67,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 235,
+          "step": 22325,
+          "applio_s": 43,
+          "wall_s": 43.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 236,
+          "step": 22420,
+          "applio_s": 43,
+          "wall_s": 43.14,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 237,
+          "step": 22515,
+          "applio_s": 43,
+          "wall_s": 43.49,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 238,
+          "step": 22610,
+          "applio_s": 42,
+          "wall_s": 42.89,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 239,
+          "step": 22705,
+          "applio_s": 43,
+          "wall_s": 43.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 240,
+          "step": 22800,
+          "applio_s": 44,
+          "wall_s": 44.5,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 241,
+          "step": 22895,
+          "applio_s": 43,
+          "wall_s": 45.64,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 242,
+          "step": 22990,
+          "applio_s": 42,
+          "wall_s": 42.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 243,
+          "step": 23085,
+          "applio_s": 43,
+          "wall_s": 43.34,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 244,
+          "step": 23180,
+          "applio_s": 43,
+          "wall_s": 43.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 245,
+          "step": 23275,
+          "applio_s": 42,
+          "wall_s": 42.8,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 246,
+          "step": 23370,
+          "applio_s": 42,
+          "wall_s": 42.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 247,
+          "step": 23465,
+          "applio_s": 43,
+          "wall_s": 43.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 248,
+          "step": 23560,
+          "applio_s": 43,
+          "wall_s": 43.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 249,
+          "step": 23655,
+          "applio_s": 43,
+          "wall_s": 43.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 250,
+          "step": 23750,
+          "applio_s": 44,
+          "wall_s": 43.98,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 251,
+          "step": 23845,
+          "applio_s": 43,
+          "wall_s": 45.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 252,
+          "step": 23940,
+          "applio_s": 43,
+          "wall_s": 43.38,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 253,
+          "step": 24035,
+          "applio_s": 42,
+          "wall_s": 42.44,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 254,
+          "step": 24130,
+          "applio_s": 42,
+          "wall_s": 42.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 255,
+          "step": 24225,
+          "applio_s": 43,
+          "wall_s": 43.55,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 256,
+          "step": 24320,
+          "applio_s": 42,
+          "wall_s": 42.89,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 257,
+          "step": 24415,
+          "applio_s": 43,
+          "wall_s": 43.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 258,
+          "step": 24510,
+          "applio_s": 42,
+          "wall_s": 42.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 259,
+          "step": 24605,
+          "applio_s": 42,
+          "wall_s": 42.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 260,
+          "step": 24700,
+          "applio_s": 44,
+          "wall_s": 44.56,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 261,
+          "step": 24795,
+          "applio_s": 43,
+          "wall_s": 44.88,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 262,
+          "step": 24890,
+          "applio_s": 43,
+          "wall_s": 43.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 263,
+          "step": 24985,
+          "applio_s": 42,
+          "wall_s": 42.88,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 264,
+          "step": 25080,
+          "applio_s": 42,
+          "wall_s": 42.62,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 265,
+          "step": 25175,
+          "applio_s": 42,
+          "wall_s": 42.69,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 266,
+          "step": 25270,
+          "applio_s": 43,
+          "wall_s": 43.09,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 267,
+          "step": 25365,
+          "applio_s": 42,
+          "wall_s": 42.52,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 268,
+          "step": 25460,
+          "applio_s": 43,
+          "wall_s": 43.41,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 269,
+          "step": 25555,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 270,
+          "step": 25650,
+          "applio_s": 43,
+          "wall_s": 43.95,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 271,
+          "step": 25745,
+          "applio_s": 42,
+          "wall_s": 44.59,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 272,
+          "step": 25840,
+          "applio_s": 43,
+          "wall_s": 43.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 273,
+          "step": 25935,
+          "applio_s": 42,
+          "wall_s": 42.45,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 274,
+          "step": 26030,
+          "applio_s": 43,
+          "wall_s": 43.08,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 275,
+          "step": 26125,
+          "applio_s": 43,
+          "wall_s": 42.98,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 276,
+          "step": 26220,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 277,
+          "step": 26315,
+          "applio_s": 43,
+          "wall_s": 43.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 278,
+          "step": 26410,
+          "applio_s": 42,
+          "wall_s": 42.7,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 279,
+          "step": 26505,
+          "applio_s": 43,
+          "wall_s": 43.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 280,
+          "step": 26600,
+          "applio_s": 44,
+          "wall_s": 44.73,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 281,
+          "step": 26695,
+          "applio_s": 42,
+          "wall_s": 44.34,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 282,
+          "step": 26790,
+          "applio_s": 43,
+          "wall_s": 43.38,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 283,
+          "step": 26885,
+          "applio_s": 42,
+          "wall_s": 42.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 284,
+          "step": 26980,
+          "applio_s": 43,
+          "wall_s": 43.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 285,
+          "step": 27075,
+          "applio_s": 43,
+          "wall_s": 43.25,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 286,
+          "step": 27170,
+          "applio_s": 42,
+          "wall_s": 42.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 287,
+          "step": 27265,
+          "applio_s": 43,
+          "wall_s": 43.14,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 288,
+          "step": 27360,
+          "applio_s": 43,
+          "wall_s": 43.5,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 289,
+          "step": 27455,
+          "applio_s": 42,
+          "wall_s": 42.55,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 290,
+          "step": 27550,
+          "applio_s": 44,
+          "wall_s": 44.34,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 291,
+          "step": 27645,
+          "applio_s": 43,
+          "wall_s": 44.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 292,
+          "step": 27740,
+          "applio_s": 42,
+          "wall_s": 42.53,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 293,
+          "step": 27835,
+          "applio_s": 43,
+          "wall_s": 43.59,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 294,
+          "step": 27930,
+          "applio_s": 43,
+          "wall_s": 43.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 295,
+          "step": 28025,
+          "applio_s": 42,
+          "wall_s": 42.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 296,
+          "step": 28120,
+          "applio_s": 43,
+          "wall_s": 43.09,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 297,
+          "step": 28215,
+          "applio_s": 47,
+          "wall_s": 47.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 298,
+          "step": 28310,
+          "applio_s": 43,
+          "wall_s": 43.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 299,
+          "step": 28405,
+          "applio_s": 42,
+          "wall_s": 42.61,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 300,
+          "step": 28500,
+          "applio_s": 44,
+          "wall_s": 44.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 301,
+          "step": 28595,
+          "applio_s": 43,
+          "wall_s": 45.64,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 302,
+          "step": 28690,
+          "applio_s": 43,
+          "wall_s": 43.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 303,
+          "step": 28785,
+          "applio_s": 42,
+          "wall_s": 42.61,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 304,
+          "step": 28880,
+          "applio_s": 43,
+          "wall_s": 43.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 305,
+          "step": 28975,
+          "applio_s": 43,
+          "wall_s": 43.12,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 306,
+          "step": 29070,
+          "applio_s": 42,
+          "wall_s": 42.64,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 307,
+          "step": 29165,
+          "applio_s": 42,
+          "wall_s": 42.69,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 308,
+          "step": 29260,
+          "applio_s": 43,
+          "wall_s": 43.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 309,
+          "step": 29355,
+          "applio_s": 43,
+          "wall_s": 43.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 310,
+          "step": 29450,
+          "applio_s": 44,
+          "wall_s": 44.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 311,
+          "step": 29545,
+          "applio_s": 43,
+          "wall_s": 44.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 312,
+          "step": 29640,
+          "applio_s": 43,
+          "wall_s": 43.5,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 313,
+          "step": 29735,
+          "applio_s": 43,
+          "wall_s": 43.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 314,
+          "step": 29830,
+          "applio_s": 42,
+          "wall_s": 41.97,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 315,
+          "step": 29925,
+          "applio_s": 43,
+          "wall_s": 43.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 316,
+          "step": 30020,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 317,
+          "step": 30115,
+          "applio_s": 43,
+          "wall_s": 43.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 318,
+          "step": 30210,
+          "applio_s": 42,
+          "wall_s": 42.88,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 319,
+          "step": 30305,
+          "applio_s": 43,
+          "wall_s": 43.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 320,
+          "step": 30400,
+          "applio_s": 44,
+          "wall_s": 44.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 321,
+          "step": 30495,
+          "applio_s": 43,
+          "wall_s": 45.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 322,
+          "step": 30590,
+          "applio_s": 42,
+          "wall_s": 42.83,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 323,
+          "step": 30685,
+          "applio_s": 43,
+          "wall_s": 43.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 324,
+          "step": 30780,
+          "applio_s": 43,
+          "wall_s": 43.09,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 325,
+          "step": 30875,
+          "applio_s": 42,
+          "wall_s": 42.56,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 326,
+          "step": 30970,
+          "applio_s": 43,
+          "wall_s": 43.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 327,
+          "step": 31065,
+          "applio_s": 43,
+          "wall_s": 43.31,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 328,
+          "step": 31160,
+          "applio_s": 42,
+          "wall_s": 42.34,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 329,
+          "step": 31255,
+          "applio_s": 43,
+          "wall_s": 43.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 330,
+          "step": 31350,
+          "applio_s": 44,
+          "wall_s": 44.12,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 331,
+          "step": 31445,
+          "applio_s": 43,
+          "wall_s": 45.24,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 332,
+          "step": 31540,
+          "applio_s": 43,
+          "wall_s": 43.05,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 333,
+          "step": 31635,
+          "applio_s": 42,
+          "wall_s": 42.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 334,
+          "step": 31730,
+          "applio_s": 43,
+          "wall_s": 43.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 335,
+          "step": 31825,
+          "applio_s": 42,
+          "wall_s": 42.89,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 336,
+          "step": 31920,
+          "applio_s": 42,
+          "wall_s": 42.89,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 337,
+          "step": 32015,
+          "applio_s": 43,
+          "wall_s": 43.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 338,
+          "step": 32110,
+          "applio_s": 43,
+          "wall_s": 42.97,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 339,
+          "step": 32205,
+          "applio_s": 42,
+          "wall_s": 42.52,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 340,
+          "step": 32300,
+          "applio_s": 44,
+          "wall_s": 44.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 341,
+          "step": 32395,
+          "applio_s": 43,
+          "wall_s": 44.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 342,
+          "step": 32490,
+          "applio_s": 43,
+          "wall_s": 43.23,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 343,
+          "step": 32585,
+          "applio_s": 43,
+          "wall_s": 43.0,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 344,
+          "step": 32680,
+          "applio_s": 43,
+          "wall_s": 43.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 345,
+          "step": 32775,
+          "applio_s": 43,
+          "wall_s": 43.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 346,
+          "step": 32870,
+          "applio_s": 43,
+          "wall_s": 43.02,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 347,
+          "step": 32965,
+          "applio_s": 42,
+          "wall_s": 42.56,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 348,
+          "step": 33060,
+          "applio_s": 43,
+          "wall_s": 43.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 349,
+          "step": 33155,
+          "applio_s": 43,
+          "wall_s": 43.42,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 350,
+          "step": 33250,
+          "applio_s": 43,
+          "wall_s": 43.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 351,
+          "step": 33345,
+          "applio_s": 43,
+          "wall_s": 45.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 352,
+          "step": 33440,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 353,
+          "step": 33535,
+          "applio_s": 42,
+          "wall_s": 42.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 354,
+          "step": 33630,
+          "applio_s": 43,
+          "wall_s": 43.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 355,
+          "step": 33725,
+          "applio_s": 42,
+          "wall_s": 42.73,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 356,
+          "step": 33820,
+          "applio_s": 42,
+          "wall_s": 42.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 357,
+          "step": 33915,
+          "applio_s": 43,
+          "wall_s": 43.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 358,
+          "step": 34010,
+          "applio_s": 42,
+          "wall_s": 42.81,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 359,
+          "step": 34105,
+          "applio_s": 43,
+          "wall_s": 43.0,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 360,
+          "step": 34200,
+          "applio_s": 44,
+          "wall_s": 44.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 361,
+          "step": 34295,
+          "applio_s": 42,
+          "wall_s": 44.48,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 362,
+          "step": 34390,
+          "applio_s": 43,
+          "wall_s": 43.5,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 363,
+          "step": 34485,
+          "applio_s": 43,
+          "wall_s": 43.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 364,
+          "step": 34580,
+          "applio_s": 42,
+          "wall_s": 42.34,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 365,
+          "step": 34675,
+          "applio_s": 42,
+          "wall_s": 42.89,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 366,
+          "step": 34770,
+          "applio_s": 43,
+          "wall_s": 43.09,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 367,
+          "step": 34865,
+          "applio_s": 42,
+          "wall_s": 42.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 368,
+          "step": 34960,
+          "applio_s": 43,
+          "wall_s": 43.05,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 369,
+          "step": 35055,
+          "applio_s": 42,
+          "wall_s": 42.83,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 370,
+          "step": 35150,
+          "applio_s": 44,
+          "wall_s": 44.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 371,
+          "step": 35245,
+          "applio_s": 43,
+          "wall_s": 45.44,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 372,
+          "step": 35340,
+          "applio_s": 42,
+          "wall_s": 42.34,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 373,
+          "step": 35435,
+          "applio_s": 43,
+          "wall_s": 43.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 374,
+          "step": 35530,
+          "applio_s": 43,
+          "wall_s": 43.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 375,
+          "step": 35625,
+          "applio_s": 43,
+          "wall_s": 43.08,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 376,
+          "step": 35720,
+          "applio_s": 43,
+          "wall_s": 43.02,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 377,
+          "step": 35815,
+          "applio_s": 43,
+          "wall_s": 43.55,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 378,
+          "step": 35910,
+          "applio_s": 42,
+          "wall_s": 42.48,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 379,
+          "step": 36005,
+          "applio_s": 43,
+          "wall_s": 43.31,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 380,
+          "step": 36100,
+          "applio_s": 44,
+          "wall_s": 44.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 381,
+          "step": 36195,
+          "applio_s": 45,
+          "wall_s": 46.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 382,
+          "step": 36290,
+          "applio_s": 45,
+          "wall_s": 45.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 383,
+          "step": 36385,
+          "applio_s": 45,
+          "wall_s": 45.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 384,
+          "step": 36480,
+          "applio_s": 45,
+          "wall_s": 45.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 385,
+          "step": 36575,
+          "applio_s": 43,
+          "wall_s": 43.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 386,
+          "step": 36670,
+          "applio_s": 42,
+          "wall_s": 42.64,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 387,
+          "step": 36765,
+          "applio_s": 43,
+          "wall_s": 43.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 388,
+          "step": 36860,
+          "applio_s": 43,
+          "wall_s": 43.08,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 389,
+          "step": 36955,
+          "applio_s": 43,
+          "wall_s": 43.14,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 390,
+          "step": 37050,
+          "applio_s": 44,
+          "wall_s": 44.41,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 391,
+          "step": 37145,
+          "applio_s": 43,
+          "wall_s": 45.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 392,
+          "step": 37240,
+          "applio_s": 43,
+          "wall_s": 43.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 393,
+          "step": 37335,
+          "applio_s": 43,
+          "wall_s": 43.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 394,
+          "step": 37430,
+          "applio_s": 42,
+          "wall_s": 42.62,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 395,
+          "step": 37525,
+          "applio_s": 43,
+          "wall_s": 43.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 396,
+          "step": 37620,
+          "applio_s": 43,
+          "wall_s": 43.66,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 397,
+          "step": 37715,
+          "applio_s": 42,
+          "wall_s": 42.67,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 398,
+          "step": 37810,
+          "applio_s": 43,
+          "wall_s": 43.25,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 399,
+          "step": 37905,
+          "applio_s": 43,
+          "wall_s": 43.48,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 400,
+          "step": 38000,
+          "applio_s": 44,
+          "wall_s": 44.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 401,
+          "step": 38095,
+          "applio_s": 43,
+          "wall_s": 45.14,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 402,
+          "step": 38190,
+          "applio_s": 43,
+          "wall_s": 43.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 403,
+          "step": 38285,
+          "applio_s": 42,
+          "wall_s": 42.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 404,
+          "step": 38380,
+          "applio_s": 43,
+          "wall_s": 43.51,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 405,
+          "step": 38475,
+          "applio_s": 42,
+          "wall_s": 42.64,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 406,
+          "step": 38570,
+          "applio_s": 43,
+          "wall_s": 43.27,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 407,
+          "step": 38665,
+          "applio_s": 43,
+          "wall_s": 43.47,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 408,
+          "step": 38760,
+          "applio_s": 42,
+          "wall_s": 42.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 409,
+          "step": 38855,
+          "applio_s": 43,
+          "wall_s": 43.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 410,
+          "step": 38950,
+          "applio_s": 44,
+          "wall_s": 44.42,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 411,
+          "step": 39045,
+          "applio_s": 43,
+          "wall_s": 45.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 412,
+          "step": 39140,
+          "applio_s": 43,
+          "wall_s": 43.33,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 413,
+          "step": 39235,
+          "applio_s": 42,
+          "wall_s": 42.73,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 414,
+          "step": 39330,
+          "applio_s": 43,
+          "wall_s": 43.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 415,
+          "step": 39425,
+          "applio_s": 42,
+          "wall_s": 42.95,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 416,
+          "step": 39520,
+          "applio_s": 42,
+          "wall_s": 42.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 417,
+          "step": 39615,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 418,
+          "step": 39710,
+          "applio_s": 43,
+          "wall_s": 43.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 419,
+          "step": 39805,
+          "applio_s": 42,
+          "wall_s": 42.5,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 420,
+          "step": 39900,
+          "applio_s": 44,
+          "wall_s": 44.66,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 421,
+          "step": 39995,
+          "applio_s": 43,
+          "wall_s": 45.41,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 422,
+          "step": 40090,
+          "applio_s": 43,
+          "wall_s": 43.31,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 423,
+          "step": 40185,
+          "applio_s": 42,
+          "wall_s": 42.95,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 424,
+          "step": 40280,
+          "applio_s": 42,
+          "wall_s": 42.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 425,
+          "step": 40375,
+          "applio_s": 43,
+          "wall_s": 43.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 426,
+          "step": 40470,
+          "applio_s": 43,
+          "wall_s": 43.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 427,
+          "step": 40565,
+          "applio_s": 43,
+          "wall_s": 43.11,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 428,
+          "step": 40660,
+          "applio_s": 43,
+          "wall_s": 43.22,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 429,
+          "step": 40755,
+          "applio_s": 43,
+          "wall_s": 43.75,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 430,
+          "step": 40850,
+          "applio_s": 50,
+          "wall_s": 50.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 431,
+          "step": 40945,
+          "applio_s": 45,
+          "wall_s": 47.75,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 432,
+          "step": 41040,
+          "applio_s": 43,
+          "wall_s": 42.98,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 433,
+          "step": 41135,
+          "applio_s": 45,
+          "wall_s": 45.72,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 434,
+          "step": 41230,
+          "applio_s": 47,
+          "wall_s": 47.14,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 435,
+          "step": 41325,
+          "applio_s": 48,
+          "wall_s": 48.83,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 436,
+          "step": 41420,
+          "applio_s": 48,
+          "wall_s": 48.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 437,
+          "step": 41515,
+          "applio_s": 44,
+          "wall_s": 44.25,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 438,
+          "step": 41610,
+          "applio_s": 42,
+          "wall_s": 42.75,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 439,
+          "step": 41705,
+          "applio_s": 43,
+          "wall_s": 43.53,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 440,
+          "step": 41800,
+          "applio_s": 44,
+          "wall_s": 44.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 441,
+          "step": 41895,
+          "applio_s": 44,
+          "wall_s": 46.06,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 442,
+          "step": 41990,
+          "applio_s": 44,
+          "wall_s": 44.8,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 443,
+          "step": 42085,
+          "applio_s": 43,
+          "wall_s": 43.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 444,
+          "step": 42180,
+          "applio_s": 44,
+          "wall_s": 44.52,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 445,
+          "step": 42275,
+          "applio_s": 43,
+          "wall_s": 43.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 446,
+          "step": 42370,
+          "applio_s": 42,
+          "wall_s": 41.99,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 447,
+          "step": 42465,
+          "applio_s": 44,
+          "wall_s": 44.3,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 448,
+          "step": 42560,
+          "applio_s": 44,
+          "wall_s": 44.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 449,
+          "step": 42655,
+          "applio_s": 42,
+          "wall_s": 42.8,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 450,
+          "step": 42750,
+          "applio_s": 47,
+          "wall_s": 47.5,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 451,
+          "step": 42845,
+          "applio_s": 48,
+          "wall_s": 51.02,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 452,
+          "step": 42940,
+          "applio_s": 50,
+          "wall_s": 50.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 453,
+          "step": 43035,
+          "applio_s": 47,
+          "wall_s": 47.62,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 454,
+          "step": 43130,
+          "applio_s": 50,
+          "wall_s": 50.02,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 455,
+          "step": 43225,
+          "applio_s": 47,
+          "wall_s": 47.23,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 456,
+          "step": 43320,
+          "applio_s": 47,
+          "wall_s": 47.55,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 457,
+          "step": 43415,
+          "applio_s": 47,
+          "wall_s": 47.12,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 458,
+          "step": 43510,
+          "applio_s": 52,
+          "wall_s": 52.34,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 459,
+          "step": 43605,
+          "applio_s": 51,
+          "wall_s": 51.36,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 460,
+          "step": 43700,
+          "applio_s": 49,
+          "wall_s": 49.83,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 461,
+          "step": 43795,
+          "applio_s": 47,
+          "wall_s": 49.52,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 462,
+          "step": 43890,
+          "applio_s": 46,
+          "wall_s": 46.41,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 463,
+          "step": 43985,
+          "applio_s": 46,
+          "wall_s": 46.66,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 464,
+          "step": 44080,
+          "applio_s": 47,
+          "wall_s": 47.19,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 465,
+          "step": 44175,
+          "applio_s": 45,
+          "wall_s": 45.97,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 466,
+          "step": 44270,
+          "applio_s": 47,
+          "wall_s": 47.16,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 467,
+          "step": 44365,
+          "applio_s": 51,
+          "wall_s": 51.69,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 468,
+          "step": 44460,
+          "applio_s": 47,
+          "wall_s": 47.12,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 469,
+          "step": 44555,
+          "applio_s": 44,
+          "wall_s": 44.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 470,
+          "step": 44650,
+          "applio_s": 46,
+          "wall_s": 46.94,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 471,
+          "step": 44745,
+          "applio_s": 43,
+          "wall_s": 44.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 472,
+          "step": 44840,
+          "applio_s": 43,
+          "wall_s": 43.28,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 473,
+          "step": 44935,
+          "applio_s": 43,
+          "wall_s": 43.73,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 474,
+          "step": 45030,
+          "applio_s": 47,
+          "wall_s": 47.95,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 475,
+          "step": 45125,
+          "applio_s": 45,
+          "wall_s": 45.47,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 476,
+          "step": 45220,
+          "applio_s": 48,
+          "wall_s": 48.17,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 477,
+          "step": 45315,
+          "applio_s": 47,
+          "wall_s": 47.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 478,
+          "step": 45410,
+          "applio_s": 46,
+          "wall_s": 46.64,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 479,
+          "step": 45505,
+          "applio_s": 47,
+          "wall_s": 47.84,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 480,
+          "step": 45600,
+          "applio_s": 47,
+          "wall_s": 47.2,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 481,
+          "step": 45695,
+          "applio_s": 46,
+          "wall_s": 49.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 482,
+          "step": 45790,
+          "applio_s": 47,
+          "wall_s": 47.78,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 483,
+          "step": 45885,
+          "applio_s": 46,
+          "wall_s": 46.58,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 484,
+          "step": 45980,
+          "applio_s": 44,
+          "wall_s": 44.73,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 485,
+          "step": 46075,
+          "applio_s": 44,
+          "wall_s": 44.77,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 486,
+          "step": 46170,
+          "applio_s": 45,
+          "wall_s": 45.38,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 487,
+          "step": 46265,
+          "applio_s": 45,
+          "wall_s": 45.7,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 488,
+          "step": 46360,
+          "applio_s": 47,
+          "wall_s": 47.0,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 489,
+          "step": 46455,
+          "applio_s": 47,
+          "wall_s": 47.72,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 490,
+          "step": 46550,
+          "applio_s": 47,
+          "wall_s": 47.44,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 491,
+          "step": 46645,
+          "applio_s": 46,
+          "wall_s": 49.03,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 492,
+          "step": 46740,
+          "applio_s": 46,
+          "wall_s": 46.8,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 493,
+          "step": 46835,
+          "applio_s": 46,
+          "wall_s": 46.59,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 494,
+          "step": 46930,
+          "applio_s": 46,
+          "wall_s": 46.75,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 495,
+          "step": 47025,
+          "applio_s": 46,
+          "wall_s": 46.66,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 496,
+          "step": 47120,
+          "applio_s": 46,
+          "wall_s": 46.08,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 497,
+          "step": 47215,
+          "applio_s": 47,
+          "wall_s": 47.92,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 498,
+          "step": 47310,
+          "applio_s": 47,
+          "wall_s": 47.39,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 499,
+          "step": 47405,
+          "applio_s": 47,
+          "wall_s": 47.44,
+          "first_in_invocation": false
+        },
+        {
+          "epoch": 500,
+          "step": 47500,
+          "applio_s": 45,
+          "wall_s": 45.61,
+          "first_in_invocation": false
+        }
+      ],
+      "peak_vram_mib": 5641,
+      "vram_samples": 4366,
+      "sec_per_epoch": 43.28,
+      "sec_per_epoch_applio": 43,
+      "steps_per_epoch": 95,
+      "checkpoints": {
+        "10": "E4-no-masked_10e_950s.pth",
+        "20": "E4-no-masked_20e_1900s.pth",
+        "30": "E4-no-masked_30e_2850s.pth",
+        "40": "E4-no-masked_40e_3800s.pth",
+        "50": "E4-no-masked_50e_4750s.pth",
+        "60": "E4-no-masked_60e_5700s.pth",
+        "70": "E4-no-masked_70e_6650s.pth",
+        "80": "E4-no-masked_80e_7600s.pth",
+        "90": "E4-no-masked_90e_8550s.pth",
+        "100": "E4-no-masked_100e_9500s.pth",
+        "110": "E4-no-masked_110e_10450s.pth",
+        "120": "E4-no-masked_120e_11400s.pth",
+        "130": "E4-no-masked_130e_12350s.pth",
+        "140": "E4-no-masked_140e_13300s.pth",
+        "150": "E4-no-masked_150e_14250s.pth",
+        "160": "E4-no-masked_160e_15200s.pth",
+        "170": "E4-no-masked_170e_16150s.pth",
+        "180": "E4-no-masked_180e_17100s.pth",
+        "190": "E4-no-masked_190e_18050s.pth",
+        "200": "E4-no-masked_200e_19000s.pth",
+        "210": "E4-no-masked_210e_19950s.pth",
+        "220": "E4-no-masked_220e_20900s.pth",
+        "230": "E4-no-masked_230e_21850s.pth",
+        "240": "E4-no-masked_240e_22800s.pth",
+        "250": "E4-no-masked_250e_23750s.pth",
+        "260": "E4-no-masked_260e_24700s.pth",
+        "270": "E4-no-masked_270e_25650s.pth",
+        "280": "E4-no-masked_280e_26600s.pth",
+        "290": "E4-no-masked_290e_27550s.pth",
+        "300": "E4-no-masked_300e_28500s.pth",
+        "310": "E4-no-masked_310e_29450s.pth",
+        "320": "E4-no-masked_320e_30400s.pth",
+        "330": "E4-no-masked_330e_31350s.pth",
+        "340": "E4-no-masked_340e_32300s.pth",
+        "350": "E4-no-masked_350e_33250s.pth",
+        "360": "E4-no-masked_360e_34200s.pth",
+        "370": "E4-no-masked_370e_35150s.pth",
+        "380": "E4-no-masked_380e_36100s.pth",
+        "390": "E4-no-masked_390e_37050s.pth",
+        "400": "E4-no-masked_400e_38000s.pth",
+        "410": "E4-no-masked_410e_38950s.pth",
+        "420": "E4-no-masked_420e_39900s.pth",
+        "430": "E4-no-masked_430e_40850s.pth",
+        "440": "E4-no-masked_440e_41800s.pth",
+        "450": "E4-no-masked_450e_42750s.pth",
+        "460": "E4-no-masked_460e_43700s.pth",
+        "470": "E4-no-masked_470e_44650s.pth",
+        "480": "E4-no-masked_480e_45600s.pth",
+        "490": "E4-no-masked_490e_46550s.pth",
+        "500": "E4-no-masked_500e_47500s.pth"
+      },
+      "disk_mib": 65445.4,
+      "finished_at": "2026-10-18T18:23:31+09:00",
+      "duration_s": 22203.7
+    },
+    "infer": {
+      "status": "ok",
+      "started_at": "2026-10-18T18:23:53+09:00",
+      "sets": [
+        "source_eval",
+        "heldout"
+      ],
+      "epochs": [
+        10,
+        20,
+        40,
+        60,
+        80,
+        100,
+        120,
+        140,
+        160,
+        180,
+        200,
+        220,
+        240,
+        260,
+        280,
+        300,
+        320,
+        340,
+        360,
+        380,
+        400,
+        420,
+        440,
+        460,
+        480,
+        500
+      ],
+      "combos": [
+        "f0-rmvpe_ir0.30_p0.33_ve1.00"
+      ],
+      "embedder_model": "contentvec",
+      "n_clips": {
+        "source_eval": 18,
+        "heldout": 30
+      },
+      "converted": 1248,
+      "skipped_existing": 0,
+      "reconverted_stale": 0,
+      "batch_infer_calls": 260,
+      "infer_wall_s": 4146.4,
+      "finished_at": "2026-10-18T19:32:59+09:00",
+      "duration_s": 4146.5
+    }
+  },
+  "invocations": [
+    {
+      "step": "prepare",
+      "started_at": "2026-10-18T12:12:16+09:00",
+      "argv": [
+        "configs\\E4-no-masked.json",
+        "prepare",
+        "train"
+      ],
+      "forced": false,
+      "repo_commit": "bf941d1a87c66bead252e71984f0922c47c68bf1",
+      "repo_dirty": true,
+      "finished_at": "2026-10-18T12:13:27+09:00",
+      "duration_s": 70.4,
+      "status": "ok"
+    },
+    {
+      "step": "train",
+      "started_at": "2026-10-18T12:13:27+09:00",
+      "argv": [
+        "configs\\E4-no-masked.json",
+        "prepare",
+        "train"
+      ],
+      "forced": false,
+      "repo_commit": "bf941d1a87c66bead252e71984f0922c47c68bf1",
+      "repo_dirty": true,
+      "finished_at": "2026-10-18T18:23:31+09:00",
+      "duration_s": 22203.7,
+      "status": "ok"
+    },
+    {
+      "step": "infer",
+      "started_at": "2026-10-18T18:23:53+09:00",
+      "argv": [
+        "configs\\E4-no-masked.json",
+        "infer",
+        "--checkpoints",
+        "10,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360,380,400,420,440,460,480,500"
+      ],
+      "forced": false,
+      "repo_commit": "bf941d1a87c66bead252e71984f0922c47c68bf1",
+      "repo_dirty": true,
+      "finished_at": "2026-10-18T19:32:59+09:00",
+      "duration_s": 4146.5,
+      "status": "ok"
+    }
+  ]
+}

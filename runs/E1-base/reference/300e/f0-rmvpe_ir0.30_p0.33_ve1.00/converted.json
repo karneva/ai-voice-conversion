@@ -1,0 +1,35 @@
+{
+ "created_at": "2026-10-18T12:01:45+09:00",
+ "run_id": "E1-base",
+ "epoch": 300,
+ "combo": "f0-rmvpe_ir0.30_p0.33_ve1.00",
+ "settings": {
+  "f0_method": "rmvpe",
+  "index_rate": 0.3,
+  "protect": 0.33,
+  "volume_envelope": 1.0,
+  "transpose": 0,
+  "embedder": "contentvec",
+  "split_audio": false
+ },
+ "inputs": {
+  "source": {
+   "path": "dataset/private/separated/cover_input/사랑합니다_(vocals)_vocals_mel_band_roformer.wav",
+   "sha256": "72538ed5d750131cb8f4f8bfc64a8a50d1c263abcee5c2fcf5e5132a39a15267"
+  },
+  "pth": {
+   "path": "Applio/logs/E1-base/E1-base_300e_47100s.pth",
+   "sha256": "5f9267b1749826f91ff506c7f7f2aed59d52bfcf44661ce47b59749f97228f39"
+  },
+  "index": {
+   "path": "Applio/logs/E1-base/E1-base.index",
+   "sha256": "ebd009cd8eddd0663452d013c3bffcf1fb87a8fcd2ecc4c83e31052201421f85"
+  }
+ },
+ "output": {
+  "path": "runs/E1-base/reference/300e/f0-rmvpe_ir0.30_p0.33_ve1.00/converted.wav",
+  "sha256": "5d2882e35a01fa3d8fe2a418c327b7268b4615474bcea3dbddfcc65f999e5e61"
+ },
+ "applio_command": "C:\\DEV\\ai-voice-conversion\\Applio\\env\\python.exe core.py infer --input-path C:\\DEV\\ai-voice-conversion\\runs\\E1-base\\reference\\300e\\f0-rmvpe_ir0.30_p0.33_ve1.00\\_work\\vocals_in.wav --output-path C:\\DEV\\ai-voice-conversion\\runs\\E1-base\\reference\\300e\\f0-rmvpe_ir0.30_p0.33_ve1.00\\_work\\vocals_converted.wav --pth-path C:\\DEV\\ai-voice-conversion\\Applio\\logs\\E1-base\\E1-base_300e_47100s.pth --index-path C:\\DEV\\ai-voice-conversion\\Applio\\logs\\E1-base\\E1-base.index --f0-method rmvpe --pitch 0 --index-rate 0.3 --protect 0.33 --volume-envelope 1.0 --embedder-model contentvec --export-format WAV --sid 0",
+ "seconds": 24.3
+}
